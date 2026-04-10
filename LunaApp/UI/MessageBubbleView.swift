@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MessageView: View {
+struct MessageBubbleView: View {
     
     let message: Message
     let availableWidth: CGFloat
@@ -70,7 +70,7 @@ struct MessageView: View {
 }
 
 #Preview {
-    MessageView(
+    MessageBubbleView(
         message: Message(
             id: UUID(),
             text: "Привет, Луна! Расскажи, как у тебя дела?",
@@ -81,7 +81,7 @@ struct MessageView: View {
 }
 
 #Preview {
-    MessageView(
+    MessageBubbleView(
         message: Message(
             id: UUID(),
             text: "Привет! Разработчик еще не добавил мне интеллект, но он работает над этим.",

@@ -15,7 +15,7 @@ struct ChatView: View {
                         Spacer()
                             .frame(height: 0)
                         ForEach(messages) { message in
-                            MessageView(
+                            MessageBubbleView(
                                 message: message,
                                 availableWidth: geometry.size.width
                             )
