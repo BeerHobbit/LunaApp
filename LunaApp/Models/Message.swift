@@ -5,7 +5,7 @@ enum Sender {
     case luna
 }
 
-struct Message: Identifiable {
+struct Message: Identifiable, Equatable {
     let id: UUID
     let text: String
     let sender: Sender

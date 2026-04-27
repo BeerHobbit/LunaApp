@@ -2,16 +2,29 @@ import SwiftUI
 
 struct ChatView: View {
     
+    // MARK: - Bindings
+    
     @Binding var messages: [Message]
     @FocusState.Binding var isFocused: Bool
     
+    // MARK: - Constants
+    
+    private enum Constants {
+        static let vStackSpacing: CGFloat = 12
+        static let rotation: Double = 180
+    }
+    
+    // MARK: - Namespaces
+    
     @Namespace private var bottom
+    
+    // MARK: - Body
     
     var body: some View {
         ScrollViewReader { proxy in
             GeometryReader { geometry in
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 12) {
+                    LazyVStack(alignment: .leading, spacing: Constants.vStackSpacing) {
                         Spacer()
                             .frame(height: 0)
                         ForEach(messages) { message in
@@ -20,13 +33,14 @@ struct ChatView: View {
                                 availableWidth: geometry.size.width
                             )
                         }
+                        .animation(.easeInOut, value: messages)
                         Spacer()
                             .frame(height: 0)
                             .id(bottom)
                     }
-                    .rotationEffect(.degrees(180))
+                    .rotationEffect(.degrees(Constants.rotation))
                 }
-                .rotationEffect(.degrees(180))
+                .rotationEffect(.degrees(Constants.rotation))
                 .scrollIndicators(.hidden)
                 .onChange(of: messages.count) {
                     scrollToBottom(proxy: proxy)
@@ -37,6 +51,8 @@ struct ChatView: View {
             }
         }
     }
+    
+    // MARK: - Private Methods
     
     private func scrollToBottom(proxy: ScrollViewProxy?) {
         withAnimation(.easeInOut(duration: 0.3)) {

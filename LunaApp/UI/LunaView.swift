@@ -2,23 +2,44 @@ import SwiftUI
 
 struct LunaView: View {
     
+    // MARK: - Bindings
+    
     @FocusState.Binding var isFocused: Bool
+    
+    // MARK: - Constants
+    
+    private enum Constants {
+        static let frameHeight: CGFloat = 170
+        static let borderWidth: CGFloat = 3
+        
+        static let shadowOpacity: Double = 0.35
+        static let shadowRadius: CGFloat = 0
+        static let shadowXOffset: CGFloat = 0
+        static let shadowYOffset: CGFloat = 6
+    }
+    
+    // MARK: - Private Properties
+    
+    private var shadowStyle: some ShapeStyle {
+        Color.LunaColors.gray
+            .shadow(
+                .drop(
+                    color: .black.opacity(Constants.shadowOpacity),
+                    radius: Constants.shadowRadius,
+                    x: Constants.shadowXOffset,
+                    y: Constants.shadowYOffset
+                )
+            )
+    }
+    
+    // MARK: - Body
     
     var body: some View {
         Image(.lunaViewBackground)
             .resizable()
-            .frame(height: 170)
-            .border(Color.LunaColors.violet, width: 3)
-            .background(
-                Color.LunaColors.gray.shadow(
-                    .drop(
-                        color: .black.opacity(0.35),
-                        radius: 0,
-                        x: 0,
-                        y: 6
-                    )
-                )
-            )
+            .frame(height: Constants.frameHeight)
+            .border(Color.LunaColors.violet, width: Constants.borderWidth)
+            .background(shadowStyle)
             .zIndex(1)
             .onTapGesture {
                 isFocused = false

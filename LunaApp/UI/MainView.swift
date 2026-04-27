@@ -1,80 +1,56 @@
 import SwiftUI
 
-struct MainView: View {
+struct MainView<VM: MainViewModelProtocol>: View {
     
-    // TODO: Should be replaced with ViewModel objects
-    @State private var messages: [Message] = [
-        Message(
-            id: UUID(),
-            text: "Привет! Меня зовут Луна, я твой личный собеседник с искуственным интеллектом",
-            sender: .luna
-        ),
-        Message(
-            id: UUID(),
-            text: "Привет, Луна! Расскажи, что ты умеешь делать?",
-            sender: .user
-        ),
-        Message(
-            id: UUID(),
-            text: "Если честно, пока ничего) Разработчик пока не реализовал работу с сетью, но он очень старается!",
-            sender: .luna
-        ),
-        Message(
-            id: UUID(),
-            text: "Что ж, с нетерпением жду!)",
-            sender: .user
-        )
-    ]
+    // MARK: - Bindings
     
-    @State private var messageText = ""
+    @Bindable var viewModel: VM
     @FocusState private var isFocused: Bool
+    
+    // MARK: - Constants
+    
+    private enum Constants {
+        static var vSpacing: CGFloat { 0 }
+        static var hInset: CGFloat { 8 }
+        static var vInset: CGFloat { 8 }
+    }
+    
+    // MARK: - Body
     
     var body: some View {
         ZStack {
             Image(.background)
                 .resizable()
                 .ignoresSafeArea(.all)
-            VStack(spacing: 0) {
+            VStack(spacing: Constants.vSpacing) {
                 LunaView(
                     isFocused: $isFocused
                 )
                 ChatView(
-                    messages: $messages,
+                    messages: $viewModel.messages,
                     isFocused: $isFocused
                 )
                 MessageInputView(
-                    text: $messageText,
-                    isFocused: $isFocused
+                    text: $viewModel.currentInput,
+                    isFocused: $isFocused,
+                    enterIsDisabled: viewModel.sendingIsDisabled
                 ) {
-                    sendMessage()
+                    handleSendTapped()
                 }
             }
-            .padding(
-                EdgeInsets(
-                    top: 8,
-                    leading: 16,
-                    bottom: 8,
-                    trailing: 16
-                )
-            )
+            .padding(.horizontal, Constants.hInset)
+            .padding(.vertical, Constants.vInset)
         }
     }
     
-    private func sendMessage() {
-        let newMessage = Message(
-            id: UUID(),
-            text: messageText,
-            sender: .user
-        )
-        messageText = ""
-        withAnimation(.easeInOut(duration: 0.25)) {
-            messages.append(newMessage)
-        }
+    // MARK: - Private Methods
+    
+    private func handleSendTapped() {
+        viewModel.sendMessage()
     }
     
 }
 
 #Preview {
-    MainView()
+    MainView(viewModel: MainViewModel())
 }
-
