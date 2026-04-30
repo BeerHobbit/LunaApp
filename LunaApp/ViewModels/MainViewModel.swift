@@ -1,15 +1,7 @@
 import Foundation
 
-protocol MainViewModelProtocol: AnyObject, Observable {
-    var messages: [Message] { get set }
-    var currentInput: String { get set }
-    var sendingIsDisabled: Bool { get }
-    
-    func sendMessage()
-}
-
 @Observable
-final class MainViewModel: MainViewModelProtocol {
+final class MainViewModel {
     
     // MARK: - Public Properties
     

@@ -1,18 +1,18 @@
 import SwiftUI
 
-struct MainView<VM: MainViewModelProtocol>: View {
+struct MainView: View {
     
     // MARK: - Bindings
     
-    @Bindable var viewModel: VM
+    @State private var viewModel: MainViewModel
     @FocusState private var isFocused: Bool
     
     // MARK: - Constants
     
     private enum Constants {
-        static var vSpacing: CGFloat { 0 }
-        static var hInset: CGFloat { 8 }
-        static var vInset: CGFloat { 8 }
+        static var vSpacing: CGFloat = 0
+        static var hInset: CGFloat = 8
+        static var vInset: CGFloat = 8
     }
     
     // MARK: - Body
@@ -43,6 +43,12 @@ struct MainView<VM: MainViewModelProtocol>: View {
         }
     }
     
+    // MARK: - Init
+    // TODO: - Should be changed after services implementation
+    init() {
+        viewModel = MainViewModel()
+    }
+    
     // MARK: - Private Methods
     
     private func handleSendTapped() {
@@ -52,5 +58,5 @@ struct MainView<VM: MainViewModelProtocol>: View {
 }
 
 #Preview {
-    MainView(viewModel: MainViewModel())
+    MainView()
 }

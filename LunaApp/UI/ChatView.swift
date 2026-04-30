@@ -33,7 +33,7 @@ struct ChatView: View {
                                 availableWidth: geometry.size.width
                             )
                         }
-                        .animation(.easeInOut, value: messages)
+                        .animation(.easeInOut(duration: 0.2), value: messages)
                         Spacer()
                             .frame(height: 0)
                             .id(bottom)
