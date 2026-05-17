@@ -24,12 +24,20 @@ struct MainView: View {
                 .ignoresSafeArea(.all)
             VStack(spacing: Constants.vSpacing) {
                 LunaView(
-                    isFocused: $isFocused
+                    isFocused: $isFocused,
+                    emotion: viewModel.emotion,
+                    isGlitched: viewModel.isGlitchedEmotion
                 )
                 ChatView(
                     messages: $viewModel.messages,
                     isFocused: $isFocused
                 )
+            }
+            .padding(.horizontal, Constants.hInset)
+            .padding(.top, Constants.vInset)
+            .padding(.bottom, Constants.vSpacing)
+            
+            .safeAreaInset(edge: .bottom, spacing: 0) {
                 MessageInputView(
                     text: $viewModel.currentInput,
                     isFocused: $isFocused,
