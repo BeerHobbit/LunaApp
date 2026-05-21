@@ -5,34 +5,15 @@ final class MainViewModel {
     
     // MARK: - Public Properties
     
-    var messages: [Message] = [
+    var messages: [Message] = (0...50).map { i in
         Message(
             id: UUID(),
-            text: "Привет! Меня зовут Луна, я твой личный собеседник с искуственным интеллектом",
-            sender: .luna
-        ),
-        Message(
-            id: UUID(),
-            text: "Привет, Луна! Расскажи, что ты умеешь делать?",
-            sender: .user
-        ),
-        Message(
-            id: UUID(),
-            text: "Если честно, пока ничего) Разработчик пока не реализовал работу с сетью, но он очень старается!",
-            sender: .luna
-        ),
-        Message(
-            id: UUID(),
-            text: "Что ж, с нетерпением жду!)",
-            sender: .user
+            text: "Сообщение \(i)",
+            sender: i.isMultiple(of: 2) ? .luna : .user
         )
-    ]
-    
-    var currentInput: String = ""
-    var sendingIsDisabled: Bool {
-        currentInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
+    var inputState: InputState = InputState(input: "")
     var lunaState: LunaState = LunaState(
         emotion: .greetings,
         isGlitched: false
@@ -41,8 +22,8 @@ final class MainViewModel {
     // MARK: - Public Methods
     
     func sendMessage() {
-        let text = currentInput
-        currentInput = ""
+        let text = inputState.input
+        inputState.clear()
         
         let newMessage = Message(
             id: UUID(),

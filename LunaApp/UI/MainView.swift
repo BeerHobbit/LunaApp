@@ -38,9 +38,8 @@ struct MainView: View {
             
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 MessageInputView(
-                    text: $viewModel.currentInput,
+                    state: $viewModel.inputState,
                     isFocused: $isFocused,
-                    enterIsDisabled: viewModel.sendingIsDisabled
                 ) {
                     handleSendTapped()
                 }

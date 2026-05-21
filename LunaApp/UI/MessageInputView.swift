@@ -4,12 +4,11 @@ struct MessageInputView: View {
     
     // MARK: - Bindings
     
-    @Binding var text: String
+    @Binding var state: InputState
     @FocusState.Binding var isFocused: Bool
     
     // MARK: - Public Properties
     
-    let enterIsDisabled: Bool
     let onSend: () -> Void
     
     // MARK: - Constants
@@ -69,7 +68,7 @@ struct MessageInputView: View {
     }
     
     private var buttonImageStyle: Color {
-        enterIsDisabled ? Color.LunaColors.gray : Color.LunaColors.black
+        state.sendingIsDisabled ? Color.LunaColors.gray : Color.LunaColors.black
     }
     
     // MARK: - Body
@@ -78,7 +77,7 @@ struct MessageInputView: View {
         HStack(alignment: .center, spacing: Constants.MainHStack.spacing) {
             TextField(
                 "",
-                text: $text,
+                text: $state.input,
                 prompt: Text("Напиши мне...")
                     .foregroundStyle(Color.LunaColors.gray),
                 axis: .vertical
@@ -98,7 +97,7 @@ struct MessageInputView: View {
                 }
                 .frame(width: Constants.Button.width, height: Constants.Button.height)
                 .background(buttonStyle)
-                .disabled(enterIsDisabled)
+                .disabled(state.sendingIsDisabled)
             }
         }
         .fixedSize(horizontal: false, vertical: true)
@@ -114,14 +113,12 @@ struct MessageInputView: View {
 }
 
 #Preview {
-    @Previewable @State var text = ""
-    @Previewable @State var isDisabled = false
+    @Previewable @State var state = InputState(input: "")
     @FocusState var isFocused: Bool
     
     MessageInputView(
-        text: $text,
+        state: $state,
         isFocused: $isFocused,
-        enterIsDisabled: isDisabled,
         onSend: {}
     )
 }
