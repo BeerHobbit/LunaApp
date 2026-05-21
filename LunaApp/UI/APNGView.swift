@@ -1,17 +1,15 @@
 import SwiftUI
 import APNGKit
 
-struct AnimationView: UIViewRepresentable {
+struct APNGView: UIViewRepresentable {
     
     // MARK: - Public Properties
     
-    let emotion: LunaEmotion
-    let isGlitched: Bool
+    let image: APNGImage?
     
     // MARK: - UIViewRepresentable
     
     func makeUIView(context: Context) -> APNGImageView {
-        let image = makeImage()
         let imageView = APNGImageView(image: image)
         
         imageView.contentMode = .scaleAspectFit
@@ -24,19 +22,7 @@ struct AnimationView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: APNGImageView, context: Context) {
-        let image = makeImage()
         uiView.image = image
-    }
-    
-    // MARK: - Private Methods
-    
-    private func makeImage() -> APNGImage? {
-        do {
-            return try emotion.animatedImage(isGlitched: isGlitched)
-        } catch {
-            assertionFailure("Failed to load image for \(emotion), error: \(error)")
-            return nil
-        }
     }
     
 }

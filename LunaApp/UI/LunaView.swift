@@ -8,8 +8,7 @@ struct LunaView: View {
     
     // MARK: - Public Properties
     
-    let emotion: LunaEmotion
-    let isGlitched: Bool
+    let state: LunaState
     
     // MARK: - Constants
     
@@ -46,10 +45,7 @@ struct LunaView: View {
             .background(shadowStyle)
             .zIndex(1)
             .overlay {
-                AnimationView(
-                    emotion: emotion,
-                    isGlitched: isGlitched
-                )
+                APNGView(image: state.animatedImage)
             }
             .border(Color.LunaColors.violet, width: Constants.borderWidth)
             .onTapGesture {
@@ -61,5 +57,11 @@ struct LunaView: View {
 
 #Preview {
     @FocusState var isFocused: Bool
-    LunaView(isFocused: $isFocused, emotion: .greetings, isGlitched: false)
+    LunaView(
+        isFocused: $isFocused,
+        state: LunaState(
+            emotion: .greetings,
+            isGlitched: false
+        )
+    )
 }

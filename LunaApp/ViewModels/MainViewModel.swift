@@ -33,8 +33,10 @@ final class MainViewModel {
         currentInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
-    var emotion: LunaEmotion = .greetings
-    var isGlitchedEmotion: Bool = false
+    var lunaState: LunaState = LunaState(
+        emotion: .greetings,
+        isGlitched: false
+    )
     
     // MARK: - Public Methods
     
@@ -49,11 +51,10 @@ final class MainViewModel {
         )
         messages.append(newMessage)
         
-        isGlitchedEmotion = true
+        lunaState.isGlitched = true
         Task {
             try? await Task.sleep(for: .seconds(0.75))
             await MainActor.run {
-                isGlitchedEmotion = false
                 changeEmotion()
                 sendAnswer()
             }
@@ -72,7 +73,8 @@ final class MainViewModel {
     }
     
     private func changeEmotion() {
-        emotion = LunaEmotion.allCases.randomElement() ?? .greetings
+        lunaState.emotion = LunaEmotion.allCases.randomElement() ?? .greetings
+        lunaState.isGlitched = false
     }
     
 }
