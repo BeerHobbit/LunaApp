@@ -8,7 +8,7 @@ struct LunaState {
         do {
             return try emotion.animatedImage(isGlitched: isGlitched)
         } catch {
-            assertionFailure("Failed to load image for \(emotion), error: \(error)")
+            assertionFailure("Failed to load image for \(emotion): \(error)")
             return nil
         }
     }
