@@ -24,16 +24,23 @@ struct MainView: View {
                 .ignoresSafeArea(.all)
             VStack(spacing: Constants.vSpacing) {
                 LunaView(
-                    isFocused: $isFocused
+                    isFocused: $isFocused,
+                    state: viewModel.lunaState,
+                    onImageTap: { viewModel.glitchLuna() }
                 )
                 ChatView(
                     messages: $viewModel.messages,
                     isFocused: $isFocused
                 )
+            }
+            .padding(.horizontal, Constants.hInset)
+            .padding(.top, Constants.vInset)
+            .padding(.bottom, Constants.vSpacing)
+            
+            .safeAreaInset(edge: .bottom, spacing: 0) {
                 MessageInputView(
-                    text: $viewModel.currentInput,
+                    state: $viewModel.inputState,
                     isFocused: $isFocused,
-                    enterIsDisabled: viewModel.sendingIsDisabled
                 ) {
                     handleSendTapped()
                 }

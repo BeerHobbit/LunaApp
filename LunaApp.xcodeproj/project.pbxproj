@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9D40BE3C2FA66BC000EC3CA6 /* APNGKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9D40BE3B2FA66BC000EC3CA6 /* APNGKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		9D4D33BA2F57C50000D18412 /* LunaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LunaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D40BE3C2FA66BC000EC3CA6 /* APNGKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = LunaApp;
 			packageProductDependencies = (
+				9D40BE3B2FA66BC000EC3CA6 /* APNGKit */,
 			);
 			productName = LunaApp;
 			productReference = 9D4D33BA2F57C50000D18412 /* LunaApp.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 9D4D33B12F57C50000D18412;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9D40BE3A2FA66BC000EC3CA6 /* XCRemoteSwiftPackageReference "APNGKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9D4D33BB2F57C50000D18412 /* Products */;
 			projectDirPath = "";
@@ -357,6 +366,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9D40BE3A2FA66BC000EC3CA6 /* XCRemoteSwiftPackageReference "APNGKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/APNGKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9D40BE3B2FA66BC000EC3CA6 /* APNGKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9D40BE3A2FA66BC000EC3CA6 /* XCRemoteSwiftPackageReference "APNGKit" */;
+			productName = APNGKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9D4D33B22F57C50000D18412 /* Project object */;
 }

@@ -1,0 +1,24 @@
+{
+  "originHash" : "c50a900b39429f71049bb99061f0baedcb7bf9678df0b7047502b726bddb972a",
+  "pins" : [
+    {
+      "identity" : "apngkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/APNGKit.git",
+      "state" : {
+        "revision" : "995386261326bce7ff19879cac84b6f27ce35629",
+        "version" : "2.3.0"
+      }
+    },
+    {
+      "identity" : "delegate",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Delegate.git",
+      "state" : {
+        "revision" : "ec3014ca2621c717f758d8718ec90e84b6e774b3",
+        "version" : "1.3.0"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -6,6 +6,11 @@ struct LunaView: View {
     
     @FocusState.Binding var isFocused: Bool
     
+    // MARK: - Public Properties
+    
+    let state: LunaState
+    var onImageTap: (() -> Void)?
+    
     // MARK: - Constants
     
     private enum Constants {
@@ -38,9 +43,16 @@ struct LunaView: View {
         Image(.lunaViewBackground)
             .resizable()
             .frame(height: Constants.frameHeight)
-            .border(Color.LunaColors.violet, width: Constants.borderWidth)
             .background(shadowStyle)
             .zIndex(1)
+            .overlay {
+                APNGView(image: state.animatedImage)
+                    .frame(width: Constants.frameHeight, height: Constants.frameHeight)
+                    .onTapGesture {
+                        onImageTap?()
+                    }
+            }
+            .border(Color.LunaColors.violet, width: Constants.borderWidth)
             .onTapGesture {
                 isFocused = false
             }
@@ -50,5 +62,11 @@ struct LunaView: View {
 
 #Preview {
     @FocusState var isFocused: Bool
-    LunaView(isFocused: $isFocused)
+    LunaView(
+        isFocused: $isFocused,
+        state: LunaState(
+            emotion: .greetings,
+            isGlitched: false
+        )
+    )
 }
