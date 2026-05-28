@@ -25,7 +25,8 @@ struct MainView: View {
             VStack(spacing: Constants.vSpacing) {
                 LunaView(
                     isFocused: $isFocused,
-                    state: viewModel.lunaState
+                    state: viewModel.lunaState,
+                    onImageTap: { viewModel.glitchLuna() }
                 )
                 ChatView(
                     messages: $viewModel.messages,

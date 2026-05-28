@@ -9,6 +9,7 @@ struct LunaView: View {
     // MARK: - Public Properties
     
     let state: LunaState
+    var onImageTap: (() -> Void)?
     
     // MARK: - Constants
     
@@ -46,6 +47,10 @@ struct LunaView: View {
             .zIndex(1)
             .overlay {
                 APNGView(image: state.animatedImage)
+                    .frame(width: Constants.frameHeight, height: Constants.frameHeight)
+                    .onTapGesture {
+                        onImageTap?()
+                    }
             }
             .border(Color.LunaColors.violet, width: Constants.borderWidth)
             .onTapGesture {

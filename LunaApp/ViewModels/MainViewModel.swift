@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 @Observable
 final class MainViewModel {
     
@@ -14,48 +15,69 @@ final class MainViewModel {
     }
     
     var inputState: InputState = InputState(input: "")
-    var lunaState: LunaState = LunaState(
-        emotion: .greetings,
-        isGlitched: false
-    )
+    var lunaState: LunaState = LunaState(emotion: .greetings, isGlitched: false)
     
     // MARK: - Public Methods
     
     func sendMessage() {
-        let text = inputState.input
+        let input = inputState.input
+        guard !input.isEmpty else { return }
         inputState.clear()
         
+        addUserMessage(with: input)
+        processLunaResponse()
+    }
+    
+    func glitchLuna() {
+        Task {
+            lunaState.isGlitched = true
+            try? await Task.sleep(for: .seconds(glitchingTime))
+            lunaState.isGlitched = false
+        }
+    }
+    
+    // MARK: - Private Properties
+    
+    private let glitchingTime: Double = 0.75
+    
+    // MARK: - Private Methods
+    
+    private func processLunaResponse() {
+        Task {
+            lunaState.isGlitched = true
+            defer { lunaState.isGlitched = false}
+            
+            await simulateLunaAnswer()
+            
+            changeEmotion()
+        }
+    }
+    
+    private func addUserMessage(with text: String) {
         let newMessage = Message(
             id: UUID(),
             text: text,
             sender: .user
         )
         messages.append(newMessage)
-        
-        lunaState.isGlitched = true
-        Task {
-            try? await Task.sleep(for: .seconds(0.75))
-            await MainActor.run {
-                changeEmotion()
-                sendAnswer()
-            }
-        }
     }
     
-    // MARK: - Private Methods
+    private func changeEmotion() {
+        lunaState.emotion = LunaEmotion.allCases.randomElement() ?? .greetings
+    }
     
-    private func sendAnswer() {
+    private func simulateLunaAnswer() async {
+        try? await Task.sleep(for: .seconds(glitchingTime))
+        addMockAnswer()
+    }
+    
+    private func addMockAnswer() {
         let answer = Message(
             id: UUID(),
             text: "Приветик! Я пока не умею отвечать осмысленно, но я обязательно стану умнее!)",
             sender: .luna
         )
         messages.append(answer)
-    }
-    
-    private func changeEmotion() {
-        lunaState.emotion = LunaEmotion.allCases.randomElement() ?? .greetings
-        lunaState.isGlitched = false
     }
     
 }
