@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9D01DA182FC9D381007A534B /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 9D01DA172FC9D381007A534B /* Realm */; };
-		9D01DA1A2FC9D381007A534B /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9D01DA192FC9D381007A534B /* RealmSwift */; };
 		9D40BE3C2FA66BC000EC3CA6 /* APNGKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9D40BE3B2FA66BC000EC3CA6 /* APNGKit */; };
+		9DF2257B2FCBBAC100531B05 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9DF2257A2FCBBAC100531B05 /* RealmSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,8 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9D01DA1A2FC9D381007A534B /* RealmSwift in Frameworks */,
-				9D01DA182FC9D381007A534B /* Realm in Frameworks */,
+				9DF2257B2FCBBAC100531B05 /* RealmSwift in Frameworks */,
 				9D40BE3C2FA66BC000EC3CA6 /* APNGKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -88,8 +86,7 @@
 			name = LunaApp;
 			packageProductDependencies = (
 				9D40BE3B2FA66BC000EC3CA6 /* APNGKit */,
-				9D01DA172FC9D381007A534B /* Realm */,
-				9D01DA192FC9D381007A534B /* RealmSwift */,
+				9DF2257A2FCBBAC100531B05 /* RealmSwift */,
 			);
 			productName = LunaApp;
 			productReference = 9D4D33BA2F57C50000D18412 /* LunaApp.app */;
@@ -121,7 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				9D40BE3A2FA66BC000EC3CA6 /* XCRemoteSwiftPackageReference "APNGKit" */,
-				9D01DA162FC9D381007A534B /* XCRemoteSwiftPackageReference "realm-swift" */,
+				9DF225792FCBBAC100531B05 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9D4D33BB2F57C50000D18412 /* Products */;
@@ -375,14 +372,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		9D01DA162FC9D381007A534B /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
-				branch = community;
-				kind = branch;
-			};
-		};
 		9D40BE3A2FA66BC000EC3CA6 /* XCRemoteSwiftPackageReference "APNGKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/APNGKit.git";
@@ -391,23 +380,26 @@
 				minimumVersion = 2.3.0;
 			};
 		};
+		9DF225792FCBBAC100531B05 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = community;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		9D01DA172FC9D381007A534B /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9D01DA162FC9D381007A534B /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		9D01DA192FC9D381007A534B /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9D01DA162FC9D381007A534B /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
 		9D40BE3B2FA66BC000EC3CA6 /* APNGKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9D40BE3A2FA66BC000EC3CA6 /* XCRemoteSwiftPackageReference "APNGKit" */;
 			productName = APNGKit;
+		};
+		9DF2257A2FCBBAC100531B05 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9DF225792FCBBAC100531B05 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
