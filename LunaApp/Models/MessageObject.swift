@@ -5,7 +5,7 @@ final class MessageObject: Object {
     @Persisted(primaryKey: true) var id: UUID
     @Persisted var text: String
     @Persisted var sender: Sender
-    
+    @Persisted var createdAt: Date
 }
 
 extension MessageObject {
@@ -14,5 +14,6 @@ extension MessageObject {
         self.id = message.id
         self.text = message.text
         self.sender = message.sender
+        self.createdAt = message.createdAt
     }
 }

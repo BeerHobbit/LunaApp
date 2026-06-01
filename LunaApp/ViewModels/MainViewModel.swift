@@ -6,14 +6,7 @@ final class MainViewModel {
     
     // MARK: - Public Properties
     
-    var messages: [Message] = (0...50).map { i in
-        Message(
-            id: UUID(),
-            text: "Сообщение \(i)",
-            sender: i.isMultiple(of: 2) ? .luna : .user
-        )
-    }
-    
+    var messages: [Message] = []
     var inputState: InputState = InputState(input: "")
     var lunaState: LunaState = LunaState(emotion: .greetings, isGlitched: false)
     
@@ -36,8 +29,16 @@ final class MainViewModel {
         }
     }
     
+    // MARK: - Init
+    
+    init(storage: MessageStorageServiceProtocol) {
+        self.storage = storage
+        bindMessages()
+    }
+    
     // MARK: - Private Properties
     
+    private var storage: MessageStorageServiceProtocol
     private let glitchingTime: Double = 0.75
     
     // MARK: - Private Methods
@@ -57,9 +58,15 @@ final class MainViewModel {
         let newMessage = Message(
             id: UUID(),
             text: text,
-            sender: .user
+            sender: .user,
+            createdAt: .now
         )
-        messages.append(newMessage)
+        
+        do {
+            try storage.save(newMessage)
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
     }
     
     private func changeEmotion() {
@@ -75,9 +82,28 @@ final class MainViewModel {
         let answer = Message(
             id: UUID(),
             text: "Приветик! Я пока не умею отвечать осмысленно, но я обязательно стану умнее!)",
-            sender: .luna
+            sender: .luna,
+            createdAt: .now
         )
-        messages.append(answer)
+        
+        do {
+            try storage.save(answer)
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+    
+    private func bindMessages() {
+        storage.startObservation { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .success(let messages):
+                self.messages = messages
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
+        }
     }
     
 }

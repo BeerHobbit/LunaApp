@@ -10,6 +10,7 @@ struct Message: Identifiable, Equatable {
     let id: UUID
     let text: String
     let sender: Sender
+    let createdAt: Date
 }
 
 extension Message {
@@ -17,5 +18,6 @@ extension Message {
         self.id = realmObject.id
         self.text = realmObject.text
         self.sender = realmObject.sender
+        self.createdAt = realmObject.createdAt
     }
 }

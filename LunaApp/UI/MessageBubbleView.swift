@@ -123,7 +123,8 @@ struct MessageBubbleView: View {
         message: Message(
             id: UUID(),
             text: "Привет, Луна! Расскажи, как у тебя дела?",
-            sender: .user
+            sender: .user,
+            createdAt: .now
         ),
         availableWidth: 350
     )
@@ -134,7 +135,8 @@ struct MessageBubbleView: View {
         message: Message(
             id: UUID(),
             text: "Привет! Разработчик еще не добавил мне интеллект, но он работает над этим.",
-            sender: .luna
+            sender: .luna,
+            createdAt: .now
         ),
         availableWidth: 350
     )

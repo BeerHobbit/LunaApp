@@ -8,8 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		9D40BE3C2FA66BC000EC3CA6 /* APNGKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9D40BE3B2FA66BC000EC3CA6 /* APNGKit */; };
+		9DF115052FCE13180075C2D9 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 9DF2257A2FCBBAC100531B05 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9DF2257B2FCBBAC100531B05 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9DF2257A2FCBBAC100531B05 /* RealmSwift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9DF115062FCE13180075C2D9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9DF115052FCE13180075C2D9 /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9D4D33BA2F57C50000D18412 /* LunaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LunaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +90,7 @@
 				9D4D33B62F57C50000D18412 /* Sources */,
 				9D4D33B72F57C50000D18412 /* Frameworks */,
 				9D4D33B82F57C50000D18412 /* Resources */,
+				9DF115062FCE13180075C2D9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

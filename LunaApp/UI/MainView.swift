@@ -29,7 +29,7 @@ struct MainView: View {
                     onImageTap: { viewModel.glitchLuna() }
                 )
                 ChatView(
-                    messages: $viewModel.messages,
+                    messages: viewModel.messages,
                     isFocused: $isFocused
                 )
             }
@@ -51,9 +51,9 @@ struct MainView: View {
     }
     
     // MARK: - Init
-    // TODO: - Should be changed after services implementation
-    init() {
-        viewModel = MainViewModel()
+
+    init(messageStorage: MessageStorageServiceProtocol) {
+        viewModel = MainViewModel(storage: messageStorage)
     }
     
     // MARK: - Private Methods
@@ -65,5 +65,5 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
+    MainView(messageStorage: MessageStorageService())
 }

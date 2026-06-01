@@ -2,9 +2,12 @@ import SwiftUI
 
 struct ChatView: View {
     
+    // MARK: - Public Properties
+    
+    var messages: [Message]
+    
     // MARK: - Bindings
     
-    @Binding var messages: [Message]
     @FocusState.Binding var isFocused: Bool
     
     // MARK: - Constants
@@ -63,32 +66,36 @@ struct ChatView: View {
 }
 
 #Preview {
-    @Previewable @State var messages: [Message] = [
+    let messages: [Message] = [
         Message(
             id: UUID(),
             text: "Привет! Меня зовут Луна, я твой личный собеседник с искуственным интеллектом",
-            sender: .luna
+            sender: .luna,
+            createdAt: .now
         ),
         Message(
             id: UUID(),
             text: "Привет, Луна! Расскажи, что ты умеешь делать?",
-            sender: .user
+            sender: .user,
+            createdAt: .now
         ),
         Message(
             id: UUID(),
             text: "Если честно, пока ничего) Разработчик пока не реализовал работу с сетью, но он очень старается!",
-            sender: .luna
+            sender: .luna,
+            createdAt: .now
         ),
         Message(
             id: UUID(),
             text: "Что ж, с нетерпением жду!)",
-            sender: .user
+            sender: .user,
+            createdAt: .now
         )
     ]
     @FocusState var isFocused: Bool
     
     ChatView(
-        messages: $messages,
+        messages: messages,
         isFocused: $isFocused
     )
 }
