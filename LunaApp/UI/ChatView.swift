@@ -14,40 +14,32 @@ struct ChatView: View {
     
     private enum Constants {
         static let vStackSpacing: CGFloat = 12
-        static let rotation: Double = 180
+        static let bottomId = "bottom"
     }
-    
-    // MARK: - Namespaces
-    
-    @Namespace private var bottom
     
     // MARK: - Body
     
     var body: some View {
         ScrollViewReader { proxy in
-            GeometryReader { geometry in
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: Constants.vStackSpacing) {
-                        Spacer()
-                            .frame(height: 0)
-                        ForEach(messages) { message in
-                            MessageBubbleView(
-                                message: message,
-                                availableWidth: geometry.size.width
-                            )
-                        }
-                        .animation(.easeInOut(duration: 0.2), value: messages)
-                        Spacer()
-                            .frame(height: 0)
-                            .id(bottom)
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: Constants.vStackSpacing) {
+                    Spacer()
+                        .frame(height: 0)
+                    ForEach(messages) { message in
+                        MessageBubbleView(
+                            message: message,
+                        )
                     }
-                    .rotationEffect(.degrees(Constants.rotation))
+                    .animation(.easeInOut(duration: 0.2), value: messages)
+                    Spacer()
+                        .frame(height: 0)
+                        .id(Constants.bottomId)
                 }
-                .rotationEffect(.degrees(Constants.rotation))
-                .scrollIndicators(.hidden)
-                .onChange(of: messages.count) {
-                    scrollToBottom(proxy: proxy)
-                }
+            }
+            .scrollIndicators(.hidden)
+            .defaultScrollAnchor(.bottom)
+            .onChange(of: messages.count) {
+                scrollToBottom(proxy: proxy)
             }
             .onTapGesture {
                 isFocused = false
@@ -59,7 +51,7 @@ struct ChatView: View {
     
     private func scrollToBottom(proxy: ScrollViewProxy?) {
         withAnimation(.easeInOut(duration: 0.3)) {
-            proxy?.scrollTo(bottom, anchor: .bottom)
+            proxy?.scrollTo(Constants.bottomId, anchor: .bottom)
         }
     }
     

@@ -3,7 +3,7 @@ import SwiftUI
 @main
 struct LunaAppApp: App {
     
-    var messageStorageService: MessageStorageServiceProtocol = MessageStorageService()
+    @State var messageStorageService: MessageStorageServiceProtocol = MessageStorageService()
     
     var body: some Scene {
         WindowGroup {

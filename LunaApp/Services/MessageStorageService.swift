@@ -36,7 +36,8 @@ final class MessageStorageService: MessageStorageServiceProtocol {
             return
         }
         
-        let objects = realm.objects(MessageObject.self).sorted(by: \.createdAt, ascending: true)
+        let objects = realm.objects(MessageObject.self)
+            .sorted(by: \.createdAt, ascending: true)
         
         token = objects.observe { changes in
             switch changes {

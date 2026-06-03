@@ -5,13 +5,12 @@ struct MessageBubbleView: View {
     // MARK: - Public Properties
     
     let message: Message
-    let availableWidth: CGFloat
     
     // MARK: - Constants
     
     private enum Constants {
         static let tailSize: CGFloat = 9
-        static let maxWidthMod: Double = 0.8
+        static let spacerMinLength: CGFloat = 50
         
         static let topInset: CGFloat = 8
         static let leadingInset: CGFloat = 12
@@ -72,17 +71,6 @@ struct MessageBubbleView: View {
             )
     }
     
-    private var maxWidth: CGFloat {
-        availableWidth * Constants.maxWidthMod
-    }
-    
-    private var alignment: Alignment {
-        switch sender {
-        case .luna: .leading
-        case .user: .trailing
-        }
-    }
-    
     private var transitionEdge: Edge {
         switch sender {
         case .luna: .leading
@@ -95,7 +83,7 @@ struct MessageBubbleView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
             if bubbleDirection != .left {
-                Spacer()
+                Spacer(minLength: Constants.spacerMinLength)
             }
             Text(message.text)
                 .font(AppFont.regular)
@@ -108,9 +96,8 @@ struct MessageBubbleView: View {
                     .fill(bubbleStyle)
                 }
                 .foregroundStyle(textColor)
-                .frame(maxWidth: maxWidth, alignment: alignment)
             if bubbleDirection != .right {
-                Spacer()
+                Spacer(minLength: Constants.spacerMinLength)
             }
         }
         .transition(.move(edge: transitionEdge).combined(with: .opacity))
@@ -125,8 +112,7 @@ struct MessageBubbleView: View {
             text: "Привет, Луна! Расскажи, как у тебя дела?",
             sender: .user,
             createdAt: .now
-        ),
-        availableWidth: 350
+        )
     )
 }
 
@@ -137,7 +123,6 @@ struct MessageBubbleView: View {
             text: "Привет! Разработчик еще не добавил мне интеллект, но он работает над этим.",
             sender: .luna,
             createdAt: .now
-        ),
-        availableWidth: 350
+        )
     )
 }

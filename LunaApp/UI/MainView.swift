@@ -48,6 +48,7 @@ struct MainView: View {
             .padding(.horizontal, Constants.hInset)
             .padding(.vertical, Constants.vInset)
         }
+        .preferredColorScheme(.dark)
     }
     
     // MARK: - Init
@@ -65,5 +66,5 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView(messageStorage: MessageStorageService())
+    MainView(messageStorage: InMemoryMessageStorageService())
 }

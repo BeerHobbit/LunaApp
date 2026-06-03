@@ -107,7 +107,6 @@ struct MessageInputView: View {
         .onTapGesture {
             isFocused = true
         }
-        .preferredColorScheme(.dark)
     }
     
 }
