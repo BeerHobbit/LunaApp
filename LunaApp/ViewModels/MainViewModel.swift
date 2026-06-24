@@ -10,6 +10,18 @@ final class MainViewModel {
     var inputState: InputState = InputState(input: "")
     var lunaState: LunaState = LunaState(emotion: .greetings, isGlitched: false)
     
+    // MARK: - Private Properties
+    
+    private var storage: MessageStorageServiceProtocol
+    private let glitchingTime: Double = 0.75
+    
+    // MARK: - Init
+    
+    init(storage: MessageStorageServiceProtocol) {
+        self.storage = storage
+        bindMessages()
+    }
+    
     // MARK: - Public Methods
     
     func sendMessage() {
@@ -28,18 +40,6 @@ final class MainViewModel {
             lunaState.isGlitched = false
         }
     }
-    
-    // MARK: - Init
-    
-    init(storage: MessageStorageServiceProtocol) {
-        self.storage = storage
-        bindMessages()
-    }
-    
-    // MARK: - Private Properties
-    
-    private var storage: MessageStorageServiceProtocol
-    private let glitchingTime: Double = 0.75
     
     // MARK: - Private Methods
     

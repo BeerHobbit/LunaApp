@@ -1,0 +1,43 @@
+{
+  "sourceLanguage" : "ru",
+  "strings" : {
+    "" : {
+      "shouldTranslate" : false
+    },
+    "input.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write me…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Напиши мне…"
+          }
+        }
+      }
+    },
+    "message.greeting" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hi! I'm Luna, your virtual AI companion."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Привет! Меня зовут Луна, я буду твоим виртуальным собеседником с искусственным интеллектом."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

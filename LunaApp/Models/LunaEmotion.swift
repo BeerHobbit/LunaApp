@@ -1,3 +1,4 @@
+import Foundation
 import APNGKit
 
 enum LunaEmotion: String, CaseIterable {
@@ -9,7 +10,7 @@ enum LunaEmotion: String, CaseIterable {
         do {
             return try APNGImage(named: name)
         } catch {
-            assertionFailure("Failed to load image for \(self): \(error)")
+            assertionFailure("Failed to load image for \(self): \(error.localizedDescription)")
             return nil
         }
     }

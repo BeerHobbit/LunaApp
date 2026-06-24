@@ -2,69 +2,60 @@ import SwiftUI
 
 struct MainView: View {
     
-    // MARK: - Bindings
+    // MARK: - Private Properties
     
-    @State private var viewModel: MainViewModel
+    @State private var viewModel: MainViewModel = MainViewModel(storage: MessageStorageService())
     @FocusState private var isFocused: Bool
-    
-    // MARK: - Constants
-    
-    private enum Constants {
-        static var vSpacing: CGFloat = 0
-        static var hInset: CGFloat = 8
-        static var vInset: CGFloat = 8
-    }
     
     // MARK: - Body
     
     var body: some View {
-        ZStack {
+        VStack(spacing: .zero) {
+            LunaView(state: viewModel.lunaState) {
+                viewModel.glitchLuna()
+            }
+            .background(AppTheme.Effects.standardShadow)
+            .zIndex(1)
+            .padding(.horizontal, AppTheme.Spacings.large)
+            .padding(.top, AppTheme.Spacings.medium)
+            
+            ChatView(
+                messages: viewModel.messages,
+                isFocused: isFocused
+            )
+            .contentMargins(
+                .horizontal,
+                AppTheme.Spacings.large - AppTheme.Components.tailSize,
+                for: .scrollContent
+            )
+            .contentMargins(
+                .vertical,
+                AppTheme.Spacings.medium,
+                for: .scrollContent
+            )
+            .clipped()
+        }
+        .safeAreaInset(edge: .bottom, spacing: .zero) {
+            MessageInputView(
+                state: $viewModel.inputState,
+                isFocused: $isFocused
+            ) {
+                viewModel.sendMessage()
+            }
+            .padding(.horizontal, AppTheme.Spacings.large)
+            .padding(.bottom, AppTheme.Spacings.medium)
+        }
+        .background(
             Image(.background)
                 .resizable()
-                .ignoresSafeArea(.all)
-            VStack(spacing: Constants.vSpacing) {
-                LunaView(
-                    isFocused: $isFocused,
-                    state: viewModel.lunaState,
-                    onImageTap: { viewModel.glitchLuna() }
-                )
-                ChatView(
-                    messages: viewModel.messages,
-                    isFocused: $isFocused
-                )
-            }
-            .padding(.horizontal, Constants.hInset)
-            .padding(.top, Constants.vInset)
-            .padding(.bottom, Constants.vSpacing)
-            
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                MessageInputView(
-                    state: $viewModel.inputState,
-                    isFocused: $isFocused,
-                ) {
-                    handleSendTapped()
-                }
-            }
-            .padding(.horizontal, Constants.hInset)
-            .padding(.vertical, Constants.vInset)
-        }
+                .ignoresSafeArea()
+        )
+        .onTapGesture { isFocused = false }
         .preferredColorScheme(.dark)
-    }
-    
-    // MARK: - Init
-
-    init(messageStorage: MessageStorageServiceProtocol) {
-        viewModel = MainViewModel(storage: messageStorage)
-    }
-    
-    // MARK: - Private Methods
-    
-    private func handleSendTapped() {
-        viewModel.sendMessage()
     }
     
 }
 
 #Preview {
-    MainView(messageStorage: InMemoryMessageStorageService())
+    MainView()
 }

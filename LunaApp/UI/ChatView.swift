@@ -4,90 +4,90 @@ struct ChatView: View {
     
     // MARK: - Public Properties
     
-    var messages: [Message]
+    let messages: [Message]
+    let isFocused: Bool
     
-    // MARK: - Bindings
+    // MARK: - Private Properties
     
-    @FocusState.Binding var isFocused: Bool
-    
-    // MARK: - Constants
-    
-    private enum Constants {
-        static let vStackSpacing: CGFloat = 12
-        static let bottomId = "bottom"
-    }
+    @State private var isInitialLoad: Bool = true
+    @State private var isOnBottom: Bool = false
     
     // MARK: - Body
     
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: Constants.vStackSpacing) {
-                    Spacer()
-                        .frame(height: 0)
+                LazyVStack(spacing: AppTheme.Spacings.medium) {
                     ForEach(messages) { message in
-                        MessageBubbleView(
-                            message: message,
-                        )
+                        MessageBubbleView(message: message)
+                            .transition(.push(from: .bottom))
+                            .onAppear {
+                                if isLast(message) {
+                                    isOnBottom = true
+                                }
+                            }
+                            .onDisappear {
+                                if isLast(message) {
+                                    isOnBottom = false
+                                }
+                            }
                     }
-                    .animation(.easeInOut(duration: 0.2), value: messages)
-                    Spacer()
-                        .frame(height: 0)
-                        .id(Constants.bottomId)
+                    .animation(
+                        .easeOut(
+                            duration: AppTheme.Animations.duration
+                        ),
+                        value: messages
+                    )
                 }
             }
-            .scrollIndicators(.hidden)
-            .defaultScrollAnchor(.bottom)
-            .onChange(of: messages.count) {
-                scrollToBottom(proxy: proxy)
+            .onChange(of: messages) {
+                scrollToBottom(proxy)
             }
-            .onTapGesture {
-                isFocused = false
+            .onChange(of: isFocused) {
+                scrollToBottomOnFocus(proxy)
             }
         }
     }
     
     // MARK: - Private Methods
     
-    private func scrollToBottom(proxy: ScrollViewProxy?) {
-        withAnimation(.easeInOut(duration: 0.3)) {
-            proxy?.scrollTo(Constants.bottomId, anchor: .bottom)
+    private func scrollToBottom(_ proxy: ScrollViewProxy) {
+        guard let lastId = messages.last?.id else { return }
+        
+        if isInitialLoad {
+            proxy.scrollTo(lastId, anchor: .bottom)
+            isInitialLoad = false
+            return
+        }
+        
+        withAnimation(.easeOut(duration: AppTheme.Animations.duration)) {
+            proxy.scrollTo(lastId, anchor: .bottom)
         }
     }
     
-}
-
-#Preview {
-    let messages: [Message] = [
-        Message(
-            id: UUID(),
-            text: "Привет! Меня зовут Луна, я твой личный собеседник с искуственным интеллектом",
-            sender: .luna,
-            createdAt: .now
-        ),
-        Message(
-            id: UUID(),
-            text: "Привет, Луна! Расскажи, что ты умеешь делать?",
-            sender: .user,
-            createdAt: .now
-        ),
-        Message(
-            id: UUID(),
-            text: "Если честно, пока ничего) Разработчик пока не реализовал работу с сетью, но он очень старается!",
-            sender: .luna,
-            createdAt: .now
-        ),
-        Message(
-            id: UUID(),
-            text: "Что ж, с нетерпением жду!)",
-            sender: .user,
-            createdAt: .now
-        )
-    ]
-    @FocusState var isFocused: Bool
+    @MainActor
+    private func scrollToBottomOnFocus(_ proxy: ScrollViewProxy) {
+        guard let lastId = messages.last?.id else { return }
+        guard isFocused || isOnBottom else { return }
+        
+        func scrollToLast() {
+            withAnimation(.smooth(duration: AppTheme.Animations.shortDuration)) {
+                proxy.scrollTo(lastId, anchor: .bottom)
+            }
+        }
+        
+        if isFocused {
+            Task {
+                try? await Task.sleep(for: .seconds(AppTheme.Animations.delay))
+                scrollToLast()
+            }
+        } else {
+            scrollToLast()
+        }
+    }
     
-    ChatView(
-        messages: messages,
-        isFocused: $isFocused
-    )
+    private func isLast(_ message: Message) -> Bool {
+        return message.id == messages.last?.id
+    }
+    
 }

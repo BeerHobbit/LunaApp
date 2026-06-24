@@ -2,71 +2,15 @@ import SwiftUI
 
 struct MessageInputView: View {
     
-    // MARK: - Bindings
+    // MARK: - Public Properties
     
     @Binding var state: InputState
     @FocusState.Binding var isFocused: Bool
-    
-    // MARK: - Public Properties
-    
     let onSend: () -> Void
-    
-    // MARK: - Constants
-    
-    private enum Constants {
-        enum MainHStack {
-            static let spacing: CGFloat = 8
-            static let insets: CGFloat = 4
-            
-            static let shadowOpacity: Double = 0.35
-            static let shadowRadius: CGFloat = 0
-            static let shadowXOffset: CGFloat = 0
-            static let shadowYOffset: CGFloat = -6
-        }
-        
-        enum TextField {
-            static let lineLimit: Int = 4
-            static let hInset: CGFloat = 10
-            static let vInset: CGFloat = 4
-        }
-        
-        enum Button {
-            static let width: CGFloat = 60
-            static let height: CGFloat = 36
-            
-            static let shadowOpacity: Double = 0.35
-            static let shadowRadius: CGFloat = 0
-            static let shadowXOffset: CGFloat = -4
-            static let shadowYOffset: CGFloat = -4
-        }
-    }
     
     // MARK: - Private Properties
     
-    private var mainHStackStyle: some ShapeStyle {
-        Color.LunaColors.lightGray
-            .shadow(
-                .drop(
-                    color: .black.opacity(Constants.MainHStack.shadowOpacity),
-                    radius: Constants.MainHStack.shadowRadius,
-                    x: Constants.MainHStack.shadowXOffset,
-                    y: Constants.MainHStack.shadowYOffset
-                )
-            )
-    }
-    
-    private var buttonStyle: some ShapeStyle {
-        Color.LunaColors.white
-            .shadow(
-                .inner(
-                    color: .black.opacity(Constants.Button.shadowOpacity),
-                    radius: Constants.Button.shadowRadius,
-                    x: Constants.Button.shadowXOffset,
-                    y: Constants.Button.shadowYOffset
-                )
-            )
-    }
-    
+    private let lineLimit = 6
     private var buttonImageStyle: Color {
         state.sendingIsDisabled ? Color.LunaColors.gray : Color.LunaColors.black
     }
@@ -74,50 +18,39 @@ struct MessageInputView: View {
     // MARK: - Body
     
     var body: some View {
-        HStack(alignment: .center, spacing: Constants.MainHStack.spacing) {
+        HStack(spacing: AppTheme.Spacings.small) {
             TextField(
                 "",
                 text: $state.input,
-                prompt: Text("Напиши мне...")
+                prompt: Text(.inputPlaceholder)
                     .foregroundStyle(Color.LunaColors.gray),
                 axis: .vertical
             )
-            .font(AppFont.regular)
-            .lineLimit(Constants.TextField.lineLimit)
-            .padding(.horizontal, Constants.TextField.hInset)
-            .padding(.vertical, Constants.TextField.vInset)
-            .foregroundStyle(Color.LunaColors.black)
+            .font(AppFont.medium)
+            .lineLimit(lineLimit)
+            .padding(AppTheme.Spacings.medium)
+            .foregroundStyle(Color.LunaColors.white)
             .focused($isFocused)
-            
             VStack {
-                Spacer(minLength: 0)
+                Spacer(minLength: .zero)
                 Button(action: onSend) {
                     Image(.enter)
-                        .foregroundStyle(buttonImageStyle)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(AppTheme.Spacings.xSmall)
                 }
-                .frame(width: Constants.Button.width, height: Constants.Button.height)
-                .background(buttonStyle)
+                .frame(
+                    width: AppTheme.Components.sendButtonWidth,
+                    height: AppTheme.Components.sendButtonHeight
+                )
+                .background(Color.LunaColors.white)
+                .foregroundStyle(buttonImageStyle)
                 .disabled(state.sendingIsDisabled)
             }
         }
+        .border(Color.LunaColors.white, width: AppTheme.Components.borderWidth)
         .fixedSize(horizontal: false, vertical: true)
-        .padding(Constants.MainHStack.insets)
-        .background(mainHStackStyle)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            isFocused = true
-        }
+        .background(Color.LunaColors.black)
     }
     
-}
-
-#Preview {
-    @Previewable @State var state = InputState(input: "")
-    @FocusState var isFocused: Bool
-    
-    MessageInputView(
-        state: $state,
-        isFocused: $isFocused,
-        onSend: {}
-    )
 }

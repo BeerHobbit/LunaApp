@@ -6,123 +6,53 @@ struct MessageBubbleView: View {
     
     let message: Message
     
-    // MARK: - Constants
-    
-    private enum Constants {
-        static let tailSize: CGFloat = 9
-        static let spacerMinLength: CGFloat = 50
-        
-        static let topInset: CGFloat = 8
-        static let leadingInset: CGFloat = 12
-        static let bottomInset: CGFloat = 12
-        static let trailingInset: CGFloat = 12
-        
-        static let shadowOpacity: Double = 0.35
-        static let shadowRadius: CGFloat = 0
-        static let shadowXOffset: CGFloat = -4
-        static let shadowYOffset: CGFloat = -4
-    }
-    
     // MARK: - Private Properties
     
-    private var sender: Sender {
-        message.sender
-    }
-    
-    private var messagePadding: EdgeInsets {
-        EdgeInsets(
-            top: Constants.topInset,
-            leading: Constants.leadingInset + (bubbleDirection == .left ? Constants.tailSize : 0),
-            bottom: Constants.bottomInset,
-            trailing: Constants.trailingInset + (bubbleDirection == .right ? Constants.tailSize : 0)
-        )
-    }
-    
-    private var bubbleColor: Color {
-        switch sender {
-        case .luna: .LunaColors.violet
-        case .user: .LunaColors.white
-        }
-    }
-    
-    private var textColor: Color {
-        switch sender {
-        case .luna: .LunaColors.white
-        case .user: .LunaColors.black
-        }
-    }
-    
-    private var bubbleDirection: MessageBubbleShape.Direction {
-        switch sender {
-        case .luna: .left
-        case .user: .right
-        }
-    }
-    
-    private var bubbleStyle: some ShapeStyle {
-        bubbleColor
-            .shadow(
-                .inner(
-                    color: .LunaColors.black.opacity(Constants.shadowOpacity),
-                    radius: Constants.shadowRadius,
-                    x: Constants.shadowXOffset,
-                    y: Constants.shadowYOffset
-                )
-            )
-    }
-    
-    private var transitionEdge: Edge {
-        switch sender {
-        case .luna: .leading
-        case .user: .trailing
-        }
-    }
+    private let tailSize: CGFloat = AppTheme.Components.tailSize
     
     // MARK: - Body
     
     var body: some View {
-        HStack(alignment: .center, spacing: 0) {
-            if bubbleDirection != .left {
-                Spacer(minLength: Constants.spacerMinLength)
-            }
-            Text(message.text)
-                .font(AppFont.regular)
-                .padding(messagePadding)
-                .background {
-                    MessageBubbleShape(
-                        direction: bubbleDirection,
-                        tailSize: Constants.tailSize
-                    )
-                    .fill(bubbleStyle)
-                }
-                .foregroundStyle(textColor)
-            if bubbleDirection != .right {
-                Spacer(minLength: Constants.spacerMinLength)
+        HStack(spacing: .zero) {
+            switch message.sender {
+            case .luna:
+                lunaMessage
+            case .user:
+                userMessage
             }
         }
-        .transition(.move(edge: transitionEdge).combined(with: .opacity))
     }
     
-}
-
-#Preview {
-    MessageBubbleView(
-        message: Message(
-            id: UUID(),
-            text: "Привет, Луна! Расскажи, как у тебя дела?",
-            sender: .user,
-            createdAt: .now
-        )
-    )
-}
-
-#Preview {
-    MessageBubbleView(
-        message: Message(
-            id: UUID(),
-            text: "Привет! Разработчик еще не добавил мне интеллект, но он работает над этим.",
-            sender: .luna,
-            createdAt: .now
-        )
-    )
+    // MARK: - Views
+    
+    @ViewBuilder
+    private var lunaMessage: some View {
+        Text(message.text)
+            .font(AppFont.regular)
+            .padding(.vertical, AppTheme.Spacings.medium)
+            .padding(.leading, AppTheme.Spacings.medium + tailSize)
+            .padding(.trailing, AppTheme.Spacings.medium)
+            .background {
+                MessageBubbleShape(direction: .left, tailSize: tailSize)
+                    .fill(Color.LunaColors.violet)
+            }
+            .foregroundStyle(Color.LunaColors.white)
+        Spacer(minLength: AppTheme.Spacings.messageSpacer)
+    }
+    
+    @ViewBuilder
+    private var userMessage: some View {
+        Spacer(minLength: AppTheme.Spacings.messageSpacer)
+        Text(message.text)
+            .font(AppFont.regular)
+            .padding(.vertical, AppTheme.Spacings.medium)
+            .padding(.leading, AppTheme.Spacings.medium)
+            .padding(.trailing, AppTheme.Spacings.medium + tailSize)
+            .background {
+                MessageBubbleShape(direction: .right)
+                    .fill(Color.LunaColors.lightGray)
+            }
+            .foregroundStyle(Color.LunaColors.black)
+    }
+    
 }

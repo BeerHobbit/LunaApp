@@ -11,6 +11,18 @@ protocol MessageStorageServiceProtocol: AnyObject {
     func deleteAll() throws
 }
 
+extension MessageStorageServiceProtocol {
+    func addGreetingMessage() throws {
+        let message = Message(
+            id: UUID(),
+            text: String(localized: .messageGreeting),
+            sender: .luna,
+            createdAt: Date.now
+        )
+        try save(message)
+    }
+}
+
 // MARK: - Errors
 
 enum MessagesStorageError: LocalizedError {
@@ -25,6 +37,10 @@ enum MessagesStorageError: LocalizedError {
 
 final class MessageStorageService: MessageStorageServiceProtocol {
     
+    // MARK: - Private Properties
+    
+    private var token: NotificationToken?
+    
     // MARK: - Public Methods
     
     func startObservation(onUpdate: @escaping (Result<[Message], Error>) -> Void) {
@@ -38,6 +54,14 @@ final class MessageStorageService: MessageStorageServiceProtocol {
         
         let objects = realm.objects(MessageObject.self)
             .sorted(by: \.createdAt, ascending: true)
+        
+        if objects.isEmpty {
+            do {
+                try addGreetingMessage()
+            } catch {
+                onUpdate(.failure(error))
+            }
+        }
         
         token = objects.observe { changes in
             switch changes {
@@ -80,20 +104,16 @@ final class MessageStorageService: MessageStorageServiceProtocol {
         }
     }
     
-    // MARK: - Deinit
-    
-    deinit {
-        token?.invalidate()
-    }
-    
-    // MARK: - Private Properties
-    
-    private var token: NotificationToken?
-    
     // MARK: - Private Methods
     
     private static func mapToMessage(_ results: Results<MessageObject>) -> [Message] {
         Array(results.map { Message(from: $0)})
+    }
+    
+    // MARK: - Deinit
+    
+    deinit {
+        token?.invalidate()
     }
     
 }
