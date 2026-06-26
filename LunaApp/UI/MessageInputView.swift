@@ -10,7 +10,7 @@ struct MessageInputView: View {
     
     // MARK: - Private Properties
     
-    private let lineLimit = 6
+    private let lineLimit: Int = 6
     private var buttonImageStyle: Color {
         state.sendingIsDisabled ? Color.LunaColors.gray : Color.LunaColors.black
     }

@@ -30,7 +30,7 @@ enum MessagesStorageError: LocalizedError {
     
     var errorDescription: String? {
         switch self {
-        case .messageNotFound: "Message not found in database"
+        case .messageNotFound: String(localized: .errorMessageNotFound)
         }
     }
 }

@@ -6,6 +6,7 @@ struct MainView: View {
     
     @State private var viewModel: MainViewModel = MainViewModel(storage: MessageStorageService())
     @FocusState private var isFocused: Bool
+    @State private var showDeleteAllAlert = false
     
     // MARK: - Body
     
@@ -16,6 +17,12 @@ struct MainView: View {
             }
             .background(AppTheme.Effects.standardShadow)
             .zIndex(1)
+            .overlay(alignment: .top) {
+                MenuView(
+                    onDeleteAll: { showDeleteAllAlert = true }
+                )
+                .padding(AppTheme.Spacings.small)
+            }
             .padding(.horizontal, AppTheme.Spacings.large)
             .padding(.top, AppTheme.Spacings.medium)
             
@@ -58,7 +65,25 @@ struct MainView: View {
         )
         .onTapGesture { isFocused = false }
         .preferredColorScheme(.dark)
+        .alert(.alertDeleteAll, isPresented: $showDeleteAllAlert) {
+            deleteAllAlertButtons
+        }
     }
+    
+    // MARK: - Views
+    
+    @ViewBuilder
+    private var deleteAllAlertButtons: some View {
+        Button(
+            .alertConfirmDeletion,
+            role: .destructive
+        ) {
+            viewModel.deleteAllMessages()
+        }
+        Button(.alertCancel, role: .cancel) {}
+    }
+    
+    // MARK: - Private Methods
     
     private func copyText(from message: Message) {
         UIPasteboard.general.string = message.text

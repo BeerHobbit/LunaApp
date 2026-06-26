@@ -10,7 +10,7 @@ struct MessageBubbleView: View {
     
     // MARK: - Private Properties
     
-    private let tailSize: CGFloat = AppTheme.Components.tailSize
+    private var tailSize: CGFloat { AppTheme.Components.tailSize }
     
     // MARK: - Body
     
