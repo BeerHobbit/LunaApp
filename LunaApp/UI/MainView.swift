@@ -21,7 +21,13 @@ struct MainView: View {
             
             ChatView(
                 messages: viewModel.messages,
-                isFocused: isFocused
+                isFocused: isFocused,
+                onMessageCopy: { message in
+                    copyText(from: message)
+                },
+                onMessageDelete: { message in
+                    delete(message)
+                }
             )
             .contentMargins(
                 .horizontal,
@@ -52,6 +58,16 @@ struct MainView: View {
         )
         .onTapGesture { isFocused = false }
         .preferredColorScheme(.dark)
+    }
+    
+    private func copyText(from message: Message) {
+        UIPasteboard.general.string = message.text
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+    }
+    
+    private func delete(_ message: Message) {
+        viewModel.deleteMessage(message)
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
     
 }

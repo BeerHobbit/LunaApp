@@ -5,6 +5,8 @@ struct MessageBubbleView: View {
     // MARK: - Public Properties
     
     let message: Message
+    let onCopy: (Message) -> Void
+    let onDelete: (Message) -> Void
     
     // MARK: - Private Properties
     
@@ -37,6 +39,8 @@ struct MessageBubbleView: View {
                     .fill(Color.LunaColors.violet)
             }
             .foregroundStyle(Color.LunaColors.white)
+            .contentShape(.contextMenuPreview, Rectangle())
+            .contextMenu { menuButtons }
         Spacer(minLength: AppTheme.Spacings.messageSpacer)
     }
     
@@ -49,10 +53,25 @@ struct MessageBubbleView: View {
             .padding(.leading, AppTheme.Spacings.medium)
             .padding(.trailing, AppTheme.Spacings.medium + tailSize)
             .background {
-                MessageBubbleShape(direction: .right)
+                MessageBubbleShape(direction: .right, tailSize: tailSize)
                     .fill(Color.LunaColors.lightGray)
             }
             .foregroundStyle(Color.LunaColors.black)
+            .contentShape(.contextMenuPreview, Rectangle())
+            .contextMenu { menuButtons }
+    }
+    
+    @ViewBuilder
+    private var menuButtons: some View {
+        Button(
+            .menuCopy,
+            systemImage: AppTheme.SystemIcons.copy
+        ) { onCopy(message) }
+        Button(
+            .menuDelete,
+            systemImage: AppTheme.SystemIcons.delete,
+            role: .destructive
+        ) { onDelete(message) }
     }
     
 }

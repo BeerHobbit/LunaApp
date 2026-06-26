@@ -8,8 +8,8 @@ struct MessageBubbleShape: InsettableShape {
         case right
     }
     
-    var direction: Direction
-    var tailSize: CGFloat = 9
+    let direction: Direction
+    var tailSize: CGFloat = 8
     var tailSteps: Int = 3
     var insetAmount: CGFloat = 0
     

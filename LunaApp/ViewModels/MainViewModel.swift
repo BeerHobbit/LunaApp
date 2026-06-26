@@ -41,6 +41,14 @@ final class MainViewModel {
         }
     }
     
+    func deleteMessage(_ message: Message) {
+        do {
+            try storage.delete(message)
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func processLunaResponse() {

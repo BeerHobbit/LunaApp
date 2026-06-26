@@ -6,6 +6,8 @@ struct ChatView: View {
     
     let messages: [Message]
     let isFocused: Bool
+    let onMessageCopy: (Message) -> Void
+    let onMessageDelete: (Message) -> Void
     
     // MARK: - Private Properties
     
@@ -19,18 +21,27 @@ struct ChatView: View {
             ScrollView {
                 LazyVStack(spacing: AppTheme.Spacings.medium) {
                     ForEach(messages) { message in
-                        MessageBubbleView(message: message)
-                            .transition(.push(from: .bottom))
-                            .onAppear {
-                                if isLast(message) {
-                                    isOnBottom = true
-                                }
+                        MessageBubbleView(
+                            message: message,
+                            onCopy: onMessageCopy,
+                            onDelete: onMessageDelete
+                        )
+                        .transition(
+                            .asymmetric(
+                                insertion: .push(from: .bottom),
+                                removal: .opacity
+                            )
+                        )
+                        .onAppear {
+                            if isLast(message) {
+                                isOnBottom = true
                             }
-                            .onDisappear {
-                                if isLast(message) {
-                                    isOnBottom = false
-                                }
+                        }
+                        .onDisappear {
+                            if isLast(message) {
+                                isOnBottom = false
                             }
+                        }
                     }
                     .animation(
                         .easeOut(
@@ -53,6 +64,7 @@ struct ChatView: View {
     
     private func scrollToBottom(_ proxy: ScrollViewProxy) {
         guard let lastId = messages.last?.id else { return }
+        guard isInitialLoad || isOnBottom else { return }
         
         if isInitialLoad {
             proxy.scrollTo(lastId, anchor: .bottom)
