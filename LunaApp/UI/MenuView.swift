@@ -20,7 +20,6 @@ struct MenuView: View {
                 action: onDeleteAll
             )
         }
-        .frame(height: buttonSize)
     }
     
     // MARK: - Views
@@ -32,9 +31,10 @@ struct MenuView: View {
         } label: {
             Image(image)
                 .resizable()
+                .scaledToFit()
                 .padding(AppTheme.Spacings.xxSmall)
         }
-        .frame(width: buttonSize)
+        .frame(width: buttonSize, height: buttonSize)
         .tint(Color.LunaColors.white)
     }
     

@@ -36,8 +36,9 @@ final class MainViewModel {
     func glitchLuna() {
         Task {
             lunaState.isGlitched = true
+            defer { lunaState.isGlitched = false }
+            
             try? await Task.sleep(for: .seconds(glitchingTime))
-            lunaState.isGlitched = false
         }
     }
     
