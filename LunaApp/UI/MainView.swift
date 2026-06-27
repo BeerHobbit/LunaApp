@@ -65,9 +65,22 @@ struct MainView: View {
         )
         .onTapGesture { isFocused = false }
         .preferredColorScheme(.dark)
+        
         .alert(.alertDeleteAll, isPresented: $showDeleteAllAlert) {
             deleteAllAlertButtons
         }
+        .alert(
+            viewModel.errorAlert?.title ?? "",
+            isPresented: $viewModel.isErrorAlertPresented,
+            presenting: viewModel.errorAlert
+        ) { _ in
+            Button(.alertOk) {
+                viewModel.errorAlert = nil
+            }
+        } message: { alert in
+            Text(alert.message)
+        }
+        
     }
     
     // MARK: - Views

@@ -9,6 +9,8 @@ final class MainViewModel {
     var messages: [Message] = []
     var inputState: InputState = InputState(input: "")
     var lunaState: LunaState = LunaState(emotion: .greetings, isGlitched: false)
+    var errorAlert: AlertState?
+    var isErrorAlertPresented: Bool = false
     
     // MARK: - Private Properties
     
@@ -46,7 +48,7 @@ final class MainViewModel {
         do {
             try storage.delete(message)
         } catch {
-            assertionFailure(error.localizedDescription)
+            handleError(error)
         }
     }
     
@@ -54,7 +56,7 @@ final class MainViewModel {
         do {
             try storage.deleteAll()
         } catch {
-            assertionFailure(error.localizedDescription)
+            handleError(error)
         }
     }
     
@@ -82,7 +84,7 @@ final class MainViewModel {
         do {
             try storage.save(newMessage)
         } catch {
-            assertionFailure(error.localizedDescription)
+            handleError(error)
         }
     }
     
@@ -106,7 +108,7 @@ final class MainViewModel {
         do {
             try storage.save(answer)
         } catch {
-            assertionFailure(error.localizedDescription)
+            handleError(error)
         }
     }
     
@@ -118,9 +120,17 @@ final class MainViewModel {
             case .success(let messages):
                 self.messages = messages
             case .failure(let error):
-                assertionFailure(error.localizedDescription)
+                handleError(error)
             }
         }
+    }
+    
+    private func handleError(_ error: Error, title: String? = nil) {
+        errorAlert = AlertState(
+            title: title ?? String(localized: .alertError),
+            message: error.localizedDescription
+        )
+        isErrorAlertPresented = true
     }
     
 }
