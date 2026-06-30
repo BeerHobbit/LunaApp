@@ -26,12 +26,6 @@ struct ChatView: View {
                             onCopy: onMessageCopy,
                             onDelete: onMessageDelete
                         )
-                        .transition(
-                            .asymmetric(
-                                insertion: .push(from: .bottom),
-                                removal: .opacity
-                            )
-                        )
                         .onAppear {
                             if isLast(message) {
                                 isOnBottom = true
@@ -43,12 +37,6 @@ struct ChatView: View {
                             }
                         }
                     }
-                    .animation(
-                        .easeOut(
-                            duration: AppTheme.Animations.duration
-                        ),
-                        value: messages
-                    )
                 }
             }
             .onChange(of: messages) {
