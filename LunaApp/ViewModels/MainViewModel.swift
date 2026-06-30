@@ -6,9 +6,9 @@ final class MainViewModel {
     
     // MARK: - Public Properties
     
-    var messages: [Message] = []
+    private(set) var messages: [Message] = []
+    private(set) var lunaState: LunaState = LunaState(emotion: .greetings, isGlitched: false)
     var inputState: InputState = InputState(input: "")
-    var lunaState: LunaState = LunaState(emotion: .greetings, isGlitched: false)
     var errorAlert: AlertState?
     var isErrorAlertPresented: Bool = false
     
