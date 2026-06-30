@@ -21,6 +21,7 @@ final class MainViewModel {
     
     init(storage: MessageStorageServiceProtocol) {
         self.storage = storage
+        addGreetingIfNeeded()
         bindMessages()
     }
     
@@ -74,7 +75,7 @@ final class MainViewModel {
     }
     
     private func addUserMessage(with text: String) {
-        let newMessage = Message(
+        let message = Message(
             id: UUID(),
             text: text,
             sender: .user,
@@ -82,7 +83,22 @@ final class MainViewModel {
         )
         
         do {
-            try storage.save(newMessage)
+            try storage.save(message)
+        } catch {
+            handleError(error)
+        }
+    }
+    
+    private func addGreetingIfNeeded() {
+        do {
+            guard try storage.isEmpty() else { return }
+            let message = Message(
+                id: UUID(),
+                text: String(localized: .messageGreeting),
+                sender: .luna,
+                createdAt: Date.now
+            )
+            try storage.save(message)
         } catch {
             handleError(error)
         }

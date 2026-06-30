@@ -9,18 +9,7 @@ protocol MessageStorageServiceProtocol: AnyObject {
     func save(_ message: Message) throws
     func delete(_ message: Message) throws
     func deleteAll() throws
-}
-
-extension MessageStorageServiceProtocol {
-    func addGreetingMessage() throws {
-        let message = Message(
-            id: UUID(),
-            text: String(localized: .messageGreeting),
-            sender: .luna,
-            createdAt: Date.now
-        )
-        try save(message)
-    }
+    func isEmpty() throws -> Bool
 }
 
 // MARK: - Errors
@@ -54,14 +43,6 @@ final class MessageStorageService: MessageStorageServiceProtocol {
         
         let objects = realm.objects(MessageObject.self)
             .sorted(by: \.createdAt, ascending: true)
-        
-        if objects.isEmpty {
-            do {
-                try addGreetingMessage()
-            } catch {
-                onUpdate(.failure(error))
-            }
-        }
         
         token = objects.observe { changes in
             switch changes {
@@ -102,6 +83,11 @@ final class MessageStorageService: MessageStorageServiceProtocol {
         try realm.write {
             realm.delete(objects)
         }
+    }
+    
+    func isEmpty() throws -> Bool {
+        let realm = try Realm()
+        return realm.objects(MessageObject.self).isEmpty
     }
     
     // MARK: - Private Methods

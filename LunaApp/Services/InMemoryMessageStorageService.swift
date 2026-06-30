@@ -13,11 +13,6 @@ final class InMemoryMessageStorageService: MessageStorageServiceProtocol {
     
     func startObservation(onUpdate: @escaping (Result<[Message], any Error>) -> Void) {
         self.onUpdate = onUpdate
-        
-        if messages.isEmpty {
-            try? addGreetingMessage()
-        }
-        
         self.onUpdate?(.success(messages))
     }
     
@@ -31,6 +26,10 @@ final class InMemoryMessageStorageService: MessageStorageServiceProtocol {
     
     func deleteAll() throws {
         messages.removeAll()
+    }
+    
+    func isEmpty() throws -> Bool {
+        messages.isEmpty
     }
     
 }

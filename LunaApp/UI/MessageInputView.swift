@@ -51,6 +51,10 @@ struct MessageInputView: View {
         .border(Color.LunaColors.white, width: AppTheme.Components.borderWidth)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.LunaColors.black)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isFocused = true
+        }
     }
     
 }
