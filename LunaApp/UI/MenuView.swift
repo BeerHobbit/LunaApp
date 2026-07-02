@@ -5,7 +5,8 @@ struct MenuView: View {
     // MARK: - Public Propeties
     
     let isEmpty: Bool
-    let onDeleteAll: () -> Void
+    let onDeleteAllTap: () -> Void
+    let onSettingsTap: () -> Void
     
     // MARK: - Private Properties
     
@@ -15,11 +16,16 @@ struct MenuView: View {
     
     var body: some View {
         HStack {
+            menuButton(
+                image: .settings,
+                action: onSettingsTap
+            )
             Spacer()
             menuButton(
                 image: .delete,
-                action: onDeleteAll
+                action: onDeleteAllTap
             )
+            .disabled(isEmpty)
         }
     }
     
@@ -37,7 +43,6 @@ struct MenuView: View {
         }
         .frame(width: buttonSize, height: buttonSize)
         .tint(Color.LunaColors.white)
-        .disabled(isEmpty)
     }
     
 }

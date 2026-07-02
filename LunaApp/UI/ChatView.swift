@@ -2,92 +2,125 @@ import SwiftUI
 
 struct ChatView: View {
     
-    // MARK: - Public Properties
-    
-    let messages: [Message]
-    let isFocused: Bool
-    let onMessageCopy: (Message) -> Void
-    let onMessageDelete: (Message) -> Void
-    
     // MARK: - Private Properties
     
-    @State private var isInitialLoad: Bool = true
-    @State private var isOnBottom: Bool = false
+    @State private var viewModel: MainViewModel = MainViewModel(storage: MessageStorageService())
+    @FocusState private var isFocused: Bool
+    @State private var showDeleteAllAlert = false
+    @State private var showSettings: Bool = false
+    private var isMessagesEmpty: Bool { viewModel.messages.isEmpty }
     
     // MARK: - Body
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(spacing: AppTheme.Spacings.medium) {
-                    ForEach(messages) { message in
-                        MessageBubbleView(
-                            message: message,
-                            onCopy: onMessageCopy,
-                            onDelete: onMessageDelete
-                        )
-                        .onAppear {
-                            if isLast(message) {
-                                isOnBottom = true
-                            }
-                        }
-                        .onDisappear {
-                            if isLast(message) {
-                                isOnBottom = false
-                            }
-                        }
-                    }
+        VStack(spacing: .zero) {
+            LunaView(state: viewModel.lunaState) {
+                viewModel.glitchLuna()
+            }
+            .background(AppTheme.Effects.standardShadow)
+            .zIndex(1)
+            .overlay(alignment: .top) {
+                MenuView(
+                    isEmpty: isMessagesEmpty,
+                    onDeleteAllTap: { showDeleteAllAlert = true },
+                    onSettingsTap: { showSettings = true }
+                )
+                .padding(AppTheme.Spacings.small)
+            }
+            .overlay(alignment: .bottomLeading) {
+                IsTypingView(isTyping: viewModel.isAnswerLoading)
+                    .padding(AppTheme.Spacings.xSmall)
+            }
+            .padding(.horizontal, AppTheme.Spacings.large)
+            .padding(.top, AppTheme.Spacings.medium)
+            
+            MessageListView(
+                messages: viewModel.messages,
+                isFocused: isFocused,
+                onMessageCopy: { message in
+                    copyText(from: message)
+                },
+                onMessageDelete: { message in
+                    delete(message)
                 }
-            }
-            .onChange(of: messages) {
-                scrollToBottom(proxy)
-            }
-            .onChange(of: isFocused) {
-                scrollToBottomOnFocus(proxy)
-            }
+            )
+            .contentMargins(
+                .horizontal,
+                AppTheme.Spacings.large - AppTheme.Components.tailSize,
+                for: .scrollContent
+            )
+            .contentMargins(
+                .vertical,
+                AppTheme.Spacings.medium,
+                for: .scrollContent
+            )
+            .clipped()
         }
+        .safeAreaInset(edge: .bottom, spacing: .zero) {
+            MessageInputView(
+                state: $viewModel.inputState,
+                isFocused: $isFocused
+            ) {
+                viewModel.sendMessage()
+            }
+            .padding(.horizontal, AppTheme.Spacings.large)
+            .padding(.bottom, AppTheme.Spacings.medium)
+        }
+        .background(
+            Image(.background)
+                .resizable()
+                .ignoresSafeArea()
+        )
+        .onTapGesture { isFocused = false }
+        .preferredColorScheme(.dark)
+        
+        .alert(.alertDeleteAll, isPresented: $showDeleteAllAlert) {
+            deleteAllAlertButtons
+        }
+        .alert(
+            viewModel.errorAlert?.title ?? "",
+            isPresented: $viewModel.isErrorAlertPresented,
+            presenting: viewModel.errorAlert
+        ) { _ in
+            Button(.alertOk) {
+                viewModel.errorAlert = nil
+            }
+        } message: { alert in
+            Text(alert.message)
+        }
+        .sheet(isPresented: $showSettings) {
+            EmptyView()
+        }
+        
+    }
+    
+    // MARK: - Views
+    
+    @ViewBuilder
+    private var deleteAllAlertButtons: some View {
+        Button(
+            .alertConfirmDeletion,
+            role: .destructive
+        ) {
+            viewModel.deleteAllMessages()
+        }
+        Button(.alertCancel, role: .cancel) {}
     }
     
     // MARK: - Private Methods
     
-    private func scrollToBottom(_ proxy: ScrollViewProxy) {
-        guard let lastId = messages.last?.id else { return }
-        guard isInitialLoad || isOnBottom else { return }
-        
-        if isInitialLoad {
-            proxy.scrollTo(lastId, anchor: .bottom)
-            isInitialLoad = false
-            return
-        }
-        
-        withAnimation(.easeOut(duration: AppTheme.Animations.duration)) {
-            proxy.scrollTo(lastId, anchor: .bottom)
-        }
+    private func copyText(from message: Message) {
+        UIPasteboard.general.string = message.text
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
     
-    @MainActor
-    private func scrollToBottomOnFocus(_ proxy: ScrollViewProxy) {
-        guard let lastId = messages.last?.id else { return }
-        guard isFocused || isOnBottom else { return }
-        
-        func scrollToLast() {
-            withAnimation(.smooth(duration: AppTheme.Animations.shortDuration)) {
-                proxy.scrollTo(lastId, anchor: .bottom)
-            }
-        }
-        
-        if isFocused {
-            Task {
-                try? await Task.sleep(for: .seconds(AppTheme.Animations.delay))
-                scrollToLast()
-            }
-        } else {
-            scrollToLast()
-        }
+    private func delete(_ message: Message) {
+        viewModel.deleteMessage(message)
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
     
-    private func isLast(_ message: Message) -> Bool {
-        return message.id == messages.last?.id
-    }
-    
+}
+
+#Preview {
+    ChatView()
 }
