@@ -4,6 +4,7 @@ struct MenuView: View {
     
     // MARK: - Public Propeties
     
+    let isEmpty: Bool
     let onDeleteAll: () -> Void
     
     // MARK: - Private Properties
@@ -36,6 +37,7 @@ struct MenuView: View {
         }
         .frame(width: buttonSize, height: buttonSize)
         .tint(Color.LunaColors.white)
+        .disabled(isEmpty)
     }
     
 }

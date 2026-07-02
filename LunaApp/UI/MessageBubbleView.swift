@@ -18,9 +18,9 @@ struct MessageBubbleView: View {
         HStack(spacing: .zero) {
             switch message.sender {
             case .luna:
-                lunaMessage
+                lunaMessage()
             case .user:
-                userMessage
+                userMessage()
             }
         }
     }
@@ -28,24 +28,24 @@ struct MessageBubbleView: View {
     // MARK: - Views
     
     @ViewBuilder
-    private var lunaMessage: some View {
+    private func lunaMessage() -> some View {
         Text(message.text)
             .font(AppFont.regular)
             .padding(.vertical, AppTheme.Spacings.medium)
             .padding(.leading, AppTheme.Spacings.medium + tailSize)
             .padding(.trailing, AppTheme.Spacings.medium)
             .background {
-                MessageBubbleShape(direction: .left, tailSize: tailSize)
+                BubbleShape(direction: .left, tailSize: tailSize)
                     .fill(Color.LunaColors.violet)
             }
             .foregroundStyle(Color.LunaColors.white)
             .contentShape(.contextMenuPreview, Rectangle())
-            .contextMenu { menuButtons }
+            .contextMenu { menuButtons() }
         Spacer(minLength: AppTheme.Spacings.messageSpacer)
     }
     
     @ViewBuilder
-    private var userMessage: some View {
+    private func userMessage() -> some View {
         Spacer(minLength: AppTheme.Spacings.messageSpacer)
         Text(message.text)
             .font(AppFont.regular)
@@ -53,16 +53,16 @@ struct MessageBubbleView: View {
             .padding(.leading, AppTheme.Spacings.medium)
             .padding(.trailing, AppTheme.Spacings.medium + tailSize)
             .background {
-                MessageBubbleShape(direction: .right, tailSize: tailSize)
+                BubbleShape(direction: .right, tailSize: tailSize)
                     .fill(Color.LunaColors.lightGray)
             }
             .foregroundStyle(Color.LunaColors.black)
             .contentShape(.contextMenuPreview, Rectangle())
-            .contextMenu { menuButtons }
+            .contextMenu { menuButtons() }
     }
     
     @ViewBuilder
-    private var menuButtons: some View {
+    private func menuButtons() -> some View {
         Button(
             .menuCopy,
             systemImage: AppTheme.SystemIcons.copy

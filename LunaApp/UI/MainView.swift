@@ -7,6 +7,7 @@ struct MainView: View {
     @State private var viewModel: MainViewModel = MainViewModel(storage: MessageStorageService())
     @FocusState private var isFocused: Bool
     @State private var showDeleteAllAlert = false
+    private var isMessagesEmpty: Bool { viewModel.messages.isEmpty }
     
     // MARK: - Body
     
@@ -19,6 +20,7 @@ struct MainView: View {
             .zIndex(1)
             .overlay(alignment: .top) {
                 MenuView(
+                    isEmpty: isMessagesEmpty,
                     onDeleteAll: { showDeleteAllAlert = true }
                 )
                 .padding(AppTheme.Spacings.small)

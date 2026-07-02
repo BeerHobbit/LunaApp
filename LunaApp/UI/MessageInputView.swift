@@ -18,7 +18,7 @@ struct MessageInputView: View {
     // MARK: - Body
     
     var body: some View {
-        HStack(spacing: AppTheme.Spacings.small) {
+        HStack(spacing: AppTheme.Spacings.xSmall) {
             TextField(
                 "",
                 text: $state.input,
