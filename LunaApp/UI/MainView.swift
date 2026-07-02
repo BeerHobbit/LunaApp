@@ -23,6 +23,10 @@ struct MainView: View {
                 )
                 .padding(AppTheme.Spacings.small)
             }
+            .overlay(alignment: .bottomLeading) {
+                IsTypingView(isTyping: viewModel.isAnswerLoading)
+                    .padding(AppTheme.Spacings.xSmall)
+            }
             .padding(.horizontal, AppTheme.Spacings.large)
             .padding(.top, AppTheme.Spacings.medium)
             

@@ -4,6 +4,23 @@
     "" : {
       "shouldTranslate" : false
     },
+    ".isTyping" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luna is typing"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Луна печатает"
+          }
+        }
+      }
+    },
     "alert.cancel" : {
       "extractionState" : "manual",
       "localizations" : {

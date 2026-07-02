@@ -8,6 +8,7 @@ final class MainViewModel {
     
     private(set) var messages: [Message] = []
     private(set) var lunaState: LunaState = LunaState(emotion: .greetings, isGlitched: false)
+    private(set) var isAnswerLoading: Bool = false
     var inputState: InputState = InputState(input: "")
     var errorAlert: AlertState?
     var isErrorAlertPresented: Bool = false
@@ -66,7 +67,11 @@ final class MainViewModel {
     private func processLunaResponse() {
         Task {
             lunaState.isGlitched = true
-            defer { lunaState.isGlitched = false}
+            isAnswerLoading = true
+            defer {
+                lunaState.isGlitched = false
+                isAnswerLoading = false
+            }
             
             await simulateLunaAnswer()
             
