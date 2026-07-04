@@ -190,6 +190,29 @@
           }
         }
       }
+    },
+    "settings.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки"
+          }
+        }
+      }
+    },
+    "Сохранить" : {
+
+    },
+    "Сохранять сообщения" : {
+
     }
   },
   "version" : "1.1"

@@ -89,7 +89,7 @@ struct ChatView: View {
             Text(alert.message)
         }
         .sheet(isPresented: $showSettings) {
-            EmptyView()
+            SettingsView()
         }
         
     }
