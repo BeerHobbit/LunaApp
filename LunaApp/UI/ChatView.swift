@@ -67,7 +67,7 @@ struct ChatView: View {
             .padding(.bottom, AppTheme.Spacings.medium)
         }
         .background(
-            Image(.background)
+            Image(.retrowaveGrid)
                 .resizable()
                 .ignoresSafeArea()
         )
