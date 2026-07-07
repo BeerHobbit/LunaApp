@@ -4,7 +4,7 @@ struct ChatView: View {
     
     // MARK: - Private Properties
     
-    @State private var viewModel: ChatViewModel = ChatViewModel(storage: MessageStorageService())
+    @State private var viewModel: ChatViewModel = ChatViewModel(settingsStorage: SettingsStorageService())
     @FocusState private var isFocused: Bool
     @State private var showDeleteAllAlert = false
     @State private var showSettings: Bool = false
@@ -14,7 +14,10 @@ struct ChatView: View {
     
     var body: some View {
         VStack(spacing: .zero) {
-            LunaView(state: viewModel.lunaState) {
+            LunaView(
+                state: viewModel.lunaState,
+                background: viewModel.settings.lunaBackground
+            ) {
                 viewModel.glitchLuna()
             }
             .background(AppTheme.Effects.standardShadow)
@@ -67,7 +70,7 @@ struct ChatView: View {
             .padding(.bottom, AppTheme.Spacings.medium)
         }
         .background(
-            Image(.retrowaveGrid)
+            Image(viewModel.settings.background.image)
                 .resizable()
                 .ignoresSafeArea()
         )
@@ -89,7 +92,7 @@ struct ChatView: View {
             Text(alert.message)
         }
         .sheet(isPresented: $showSettings) {
-            SettingsView()
+            SettingsView(storage: viewModel.settingsStorage)
         }
         
     }

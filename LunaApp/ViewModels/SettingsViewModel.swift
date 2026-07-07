@@ -29,8 +29,8 @@ final class SettingsViewModel {
     
     private func observeSettings() {
         settingsStorage.settingsPublisher
-            .sink { [weak self] settings in
-                self?.settings = settings
+            .sink { [weak self] newSettings in
+                self?.settings = newSettings
             }
             .store(in: &cancellables)
     }

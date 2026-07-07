@@ -3,7 +3,7 @@ import Combine
 
 // MARK: - Protocol
 
-protocol SettingsStorageServiceProtocol: AnyObject {
+protocol SettingsStorageServiceProtocol {
     var settingsPublisher: AnyPublisher<Settings, Never> { get }
     func save(_ settings: Settings)
     func load() -> Settings

@@ -5,12 +5,13 @@ struct LunaView: View {
     // MARK: - Public Properties
     
     let state: LunaState
+    let background: LunaBackgroundImage
     let onImageTap: (() -> Void)
     
     // MARK: - Body
     
     var body: some View {
-        Image(.lunaViewBackground)
+        Image(background.image)
             .resizable()
             .frame(height: AppTheme.Components.lunaViewHeight)
             .overlay {

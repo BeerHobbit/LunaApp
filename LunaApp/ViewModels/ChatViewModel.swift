@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 @MainActor
 @Observable
@@ -9,21 +10,32 @@ final class ChatViewModel {
     private(set) var messages: [Message] = []
     private(set) var lunaState: LunaState = LunaState(emotion: .greetings, isGlitched: false)
     private(set) var isAnswerLoading: Bool = false
+    private(set) var settings: Settings
     var inputState: InputState = InputState(input: "")
     var errorAlert: AlertState?
     var isErrorAlertPresented: Bool = false
+    let settingsStorage: SettingsStorageServiceProtocol
     
     // MARK: - Private Properties
     
     private var storage: MessageStorageServiceProtocol
     private let glitchingTime: Double = 0.75
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Init
     
-    init(storage: MessageStorageServiceProtocol) {
-        self.storage = storage
+    init(settingsStorage: SettingsStorageServiceProtocol) {
+        let savedSettings = settingsStorage.load()
+        
+        self.settingsStorage = settingsStorage
+        self.settings = savedSettings
+        self.storage = savedSettings.shouldSave
+        ? MessageStorageService()
+        : InMemoryMessageStorageService()
+        
         addGreetingIfNeeded()
-        bindMessages()
+        observeSettings()
+        observeMessages()
     }
     
     // MARK: - Public Methods
@@ -133,7 +145,7 @@ final class ChatViewModel {
         }
     }
     
-    private func bindMessages() {
+    private func observeMessages() {
         storage.startObservation { [weak self] result in
             guard let self else { return }
             
@@ -146,12 +158,32 @@ final class ChatViewModel {
         }
     }
     
+    private func observeSettings() {
+        settingsStorage.settingsPublisher
+            .sink { [weak self] newSettings in
+                let shouldChangeStorage = self?.settings.shouldSave != newSettings.shouldSave
+                self?.settings = newSettings
+                
+                if shouldChangeStorage {
+                    self?.changeStorage()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
     private func handleError(_ error: Error, title: String? = nil) {
         errorAlert = AlertState(
             title: title ?? String(localized: .alertError),
             message: error.localizedDescription
         )
         isErrorAlertPresented = true
+    }
+    
+    private func changeStorage() {
+        storage = settings.shouldSave
+        ? MessageStorageService()
+        : InMemoryMessageStorageService()
+        observeMessages()
     }
     
 }
