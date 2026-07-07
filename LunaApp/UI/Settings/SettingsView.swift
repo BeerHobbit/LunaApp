@@ -3,17 +3,14 @@ import SwiftUI
 struct SettingsView: View {
     
     @Environment(\.dismiss) private var dismiss
-    @State var shouldSave: Bool = true
-    @State var hasChanges: Bool = true
-    @State var chosenBackground: BackgroundImage = .retrowaveGrid
-    @State var chosenLunaBackground: LunaBackgroundImage = .window
+    @State var viewModel: SettingsViewModel
     private let backgrounds: [BackgroundImage] = BackgroundImage.allCases
     private let lunaBackgrounds: [LunaBackgroundImage] = LunaBackgroundImage.allCases
     
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
-                Toggle(isOn: $shouldSave) {
+                Toggle(isOn: $viewModel.settings.shouldSave) {
                     Text("Сохранять сообщения")
                 }
                 .font(AppFont.medium)
@@ -31,7 +28,7 @@ struct SettingsView: View {
                                 Image(background.previewImage)
                                     .resizable()
                                     .overlay {
-                                        if background == chosenBackground {
+                                        if background == viewModel.settings.background {
                                             ZStack {
                                                 Color.LunaColors.darkGray
                                                     .opacity(0.5)
@@ -44,7 +41,7 @@ struct SettingsView: View {
                                     }
                                     .frame(width: 120, height: 200)
                                     .onTapGesture {
-                                        chosenBackground = background
+                                        viewModel.settings.background = background
                                     }
                             }
                         }
@@ -63,7 +60,7 @@ struct SettingsView: View {
                                 Image(background.previewImage)
                                     .resizable()
                                     .overlay {
-                                        if background == chosenLunaBackground {
+                                        if background == viewModel.settings.lunaBackground {
                                             ZStack {
                                                 Color.LunaColors.darkGray
                                                     .opacity(0.5)
@@ -76,7 +73,7 @@ struct SettingsView: View {
                                     }
                                     .frame(width: 200, height: 120)
                                     .onTapGesture {
-                                        chosenLunaBackground = background
+                                        viewModel.settings.lunaBackground = background
                                     }
                             }
                         }
@@ -87,7 +84,8 @@ struct SettingsView: View {
                 
                 Spacer()
                 Button {
-                    saveChanges()
+                    viewModel.saveChanges()
+                    dismiss()
                 } label: {
                     Text("Сохранить")
                 }
@@ -98,7 +96,7 @@ struct SettingsView: View {
                 .background(
                     Color.LunaColors.white
                 )
-                .disabled(!hasChanges)
+                .disabled(!viewModel.hasChanges)
                 .padding()
             }
             .toolbar {
@@ -137,12 +135,12 @@ struct SettingsView: View {
         }
     }
     
-    private func saveChanges() {
-        
+    init(storage: SettingsStorageServiceProtocol) {
+        viewModel = SettingsViewModel(storage: storage)
     }
-    
+
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(storage: SettingsStorageService())
 }

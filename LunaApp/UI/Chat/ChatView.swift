@@ -4,7 +4,7 @@ struct ChatView: View {
     
     // MARK: - Private Properties
     
-    @State private var viewModel: MainViewModel = MainViewModel(storage: MessageStorageService())
+    @State private var viewModel: ChatViewModel = ChatViewModel(storage: MessageStorageService())
     @FocusState private var isFocused: Bool
     @State private var showDeleteAllAlert = false
     @State private var showSettings: Bool = false

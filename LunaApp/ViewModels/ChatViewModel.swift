@@ -2,7 +2,7 @@ import Foundation
 
 @MainActor
 @Observable
-final class MainViewModel {
+final class ChatViewModel {
     
     // MARK: - Public Properties
     
