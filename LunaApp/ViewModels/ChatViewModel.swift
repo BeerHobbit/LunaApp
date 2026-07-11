@@ -14,24 +14,27 @@ final class ChatViewModel {
     var inputState: InputState = InputState(input: "")
     var errorAlert: AlertState?
     var isErrorAlertPresented: Bool = false
-    let settingsStorage: SettingsStorageServiceProtocol
     
     // MARK: - Private Properties
     
+    private let settingsStorage: SettingsStorageServiceProtocol
+    private let storageFactory: MessageStorageFactoryProtocol
     private var storage: MessageStorageServiceProtocol
     private let glitchingTime: Double = 0.75
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Init
     
-    init(settingsStorage: SettingsStorageServiceProtocol) {
+    init(
+        settingsStorage: SettingsStorageServiceProtocol,
+        storageFactory: MessageStorageFactoryProtocol
+    ) {
         let savedSettings = settingsStorage.load()
         
         self.settingsStorage = settingsStorage
         self.settings = savedSettings
-        self.storage = savedSettings.shouldSave
-        ? MessageStorageService()
-        : InMemoryMessageStorageService()
+        self.storageFactory = storageFactory
+        self.storage = storageFactory.makeStorage(shouldSave: savedSettings.shouldSave)
         
         addGreetingIfNeeded()
         observeSettings()
@@ -161,11 +164,13 @@ final class ChatViewModel {
     private func observeSettings() {
         settingsStorage.settingsPublisher
             .sink { [weak self] newSettings in
-                let shouldChangeStorage = self?.settings.shouldSave != newSettings.shouldSave
-                self?.settings = newSettings
+                guard let self else { return }
+                
+                let shouldChangeStorage = settings.shouldSave != newSettings.shouldSave
+                settings = newSettings
                 
                 if shouldChangeStorage {
-                    self?.changeStorage()
+                    changeStorage(shouldSave: settings.shouldSave)
                 }
             }
             .store(in: &cancellables)
@@ -179,10 +184,10 @@ final class ChatViewModel {
         isErrorAlertPresented = true
     }
     
-    private func changeStorage() {
-        storage = settings.shouldSave
-        ? MessageStorageService()
-        : InMemoryMessageStorageService()
+    private func changeStorage(shouldSave: Bool) {
+        deleteAllMessages()
+        storage = storageFactory.makeStorage(shouldSave: shouldSave)
+        addGreetingIfNeeded()
         observeMessages()
     }
     

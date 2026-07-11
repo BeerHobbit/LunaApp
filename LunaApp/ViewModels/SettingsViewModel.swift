@@ -17,8 +17,8 @@ final class SettingsViewModel {
     init(storage: SettingsStorageServiceProtocol) {
         self.settingsStorage = storage
         let current = settingsStorage.load()
-        settings = current
-        savedSettings = current
+        self.settings = current
+        self.savedSettings = current
         observeSettings()
     }
     

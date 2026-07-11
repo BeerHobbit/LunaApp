@@ -4,8 +4,9 @@ struct ChatView: View {
     
     // MARK: - Private Properties
     
-    @State private var viewModel: ChatViewModel = ChatViewModel(settingsStorage: SettingsStorageService())
+    @State private var viewModel: ChatViewModel
     @FocusState private var isFocused: Bool
+    @Environment(DependencyContainer.self) private var container
     @State private var showDeleteAllAlert = false
     @State private var showSettings: Bool = false
     private var isMessagesEmpty: Bool { viewModel.messages.isEmpty }
@@ -92,7 +93,7 @@ struct ChatView: View {
             Text(alert.message)
         }
         .sheet(isPresented: $showSettings) {
-            SettingsView(storage: viewModel.settingsStorage)
+            SettingsView(viewModel: container.makeSettingsViewModel())
         }
         
     }
@@ -110,6 +111,10 @@ struct ChatView: View {
         Button(.alertCancel, role: .cancel) {}
     }
     
+    init(viewModel: ChatViewModel) {
+        self.viewModel = viewModel
+    }
+    
     // MARK: - Private Methods
     
     private func copyText(from message: Message) {
@@ -125,5 +130,7 @@ struct ChatView: View {
 }
 
 #Preview {
-    ChatView()
+    let container = DependencyContainer()
+    ChatView(viewModel: container.makeChatViewModel())
+        .environment(container)
 }

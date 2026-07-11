@@ -135,12 +135,13 @@ struct SettingsView: View {
         }
     }
     
-    init(storage: SettingsStorageServiceProtocol) {
-        viewModel = SettingsViewModel(storage: storage)
+    init(viewModel: SettingsViewModel) {
+        self.viewModel = viewModel
     }
 
 }
 
 #Preview {
-    SettingsView(storage: SettingsStorageService())
+    let container = DependencyContainer()
+    SettingsView(viewModel: container.makeSettingsViewModel())
 }
