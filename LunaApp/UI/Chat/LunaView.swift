@@ -14,7 +14,7 @@ struct LunaView: View {
         Image(background.image)
             .resizable()
             .frame(height: AppTheme.Components.lunaViewHeight)
-            .overlay {
+            .overlay(alignment: .bottom) {
                 APNGView(image: state.animatedImage)
                     .frame(
                         width: AppTheme.Components.lunaViewHeight,
