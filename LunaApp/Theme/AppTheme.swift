@@ -20,8 +20,6 @@ enum AppTheme {
         
         static let sendButtonHeight: CGFloat = 44
         static let sendButtonWidth: CGFloat = 60
-        
-        static let lunaViewHeight: CGFloat = 170
     }
     
     enum Animations {

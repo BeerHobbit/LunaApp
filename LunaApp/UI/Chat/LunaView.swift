@@ -13,15 +13,13 @@ struct LunaView: View {
     var body: some View {
         Image(background.image)
             .resizable()
-            .frame(height: AppTheme.Components.lunaViewHeight)
+            .aspectRatio(2, contentMode: .fit)
             .overlay(alignment: .bottom) {
                 APNGView(image: state.animatedImage)
-                    .frame(
-                        width: AppTheme.Components.lunaViewHeight,
-                        height: AppTheme.Components.lunaViewHeight,
-                    )
+                    .aspectRatio(1, contentMode: .fit)
                     .onTapGesture { onImageTap() }
             }
+            .clipped()
             .border(Color.LunaColors.violet, width: AppTheme.Components.borderWidth)
     }
     
