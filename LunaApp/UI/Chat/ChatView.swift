@@ -4,7 +4,7 @@ struct ChatView: View {
     
     // MARK: - Private Properties
     
-    @State private var viewModel: ChatViewModel
+    @Bindable private var viewModel: ChatViewModel
     @FocusState private var isFocused: Bool
     @Environment(DependencyContainer.self) private var container
     @State private var showDeleteAllAlert = false
@@ -110,6 +110,8 @@ struct ChatView: View {
         }
         Button(.alertCancel, role: .cancel) {}
     }
+    
+    // MARK: - Init
     
     init(viewModel: ChatViewModel) {
         self.viewModel = viewModel

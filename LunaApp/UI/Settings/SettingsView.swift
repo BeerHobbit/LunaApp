@@ -2,8 +2,8 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    @Bindable private var viewModel: SettingsViewModel
     @Environment(\.dismiss) private var dismiss
-    @State var viewModel: SettingsViewModel
     private let backgrounds: [BackgroundImage] = BackgroundImage.allCases
     private let lunaBackgrounds: [LunaBackgroundImage] = LunaBackgroundImage.allCases
     
