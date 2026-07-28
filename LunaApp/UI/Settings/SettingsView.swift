@@ -18,69 +18,22 @@ struct SettingsView: View {
                 .tint(Color.LunaColors.violet)
                 .padding(.horizontal)
                 
-                VStack(alignment: .leading) {
-                    Text("Обои")
-                        .font(AppFont.medium)
-                        .padding(.horizontal)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(alignment: .top) {
-                            ForEach(backgrounds, id: \.rawValue) { background in
-                                Image(background.previewImage)
-                                    .resizable()
-                                    .overlay {
-                                        if background == viewModel.settings.background {
-                                            ZStack {
-                                                Color.LunaColors.darkGray
-                                                    .opacity(0.5)
-                                                Image(.check)
-                                                    .resizable()
-                                                    .padding(8)
-                                                    .frame(width: 44, height: 44)
-                                            }
-                                        }
-                                    }
-                                    .frame(width: 120, height: 200)
-                                    .onTapGesture {
-                                        viewModel.settings.background = background
-                                    }
-                            }
-                        }
-                    }
-                    .contentMargins(.horizontal, 16, for: .scrollContent)
-                    .frame(height: 200)
-                }
-                
-                VStack(alignment: .leading) {
-                    Text("Обои Луны")
-                        .font(AppFont.medium)
-                        .padding(.horizontal)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(alignment: .top) {
-                            ForEach(lunaBackgrounds, id: \.rawValue) { background in
-                                Image(background.previewImage)
-                                    .resizable()
-                                    .overlay {
-                                        if background == viewModel.settings.lunaBackground {
-                                            ZStack {
-                                                Color.LunaColors.darkGray
-                                                    .opacity(0.5)
-                                                Image(.check)
-                                                    .resizable()
-                                                    .padding(8)
-                                                    .frame(width: 44, height: 44)
-                                            }
-                                        }
-                                    }
-                                    .frame(width: 200, height: 120)
-                                    .onTapGesture {
-                                        viewModel.settings.lunaBackground = background
-                                    }
-                            }
-                        }
-                    }
-                    .contentMargins(.horizontal, 16, for: .scrollContent)
-                    .frame(height: 120)
-                }
+                ImageSelectionView(
+                    title: "Обои",
+                    images: backgrounds,
+                    selected: $viewModel.settings.background,
+                    aspectRatio: 1/2,
+                    visibleItems: 2,
+                    widthMultiplier: 0.8
+                )
+                ImageSelectionView(
+                    title: "Обои Луны",
+                    images: lunaBackgrounds,
+                    selected: $viewModel.settings.lunaBackground,
+                    aspectRatio: 2/1,
+                    visibleItems: 1,
+                    widthMultiplier: 0.8
+                )
                 
                 Spacer()
                 Button {
@@ -115,7 +68,7 @@ struct SettingsView: View {
     private func toolbarItems() -> some ToolbarContent {
         ToolbarItem(placement: .title) {
             Text(.settingsTitle)
-                .font(AppFont.medium)
+                .font(AppFont.large)
                 .foregroundStyle(Color.LunaColors.white)
         }
         ToolbarItem(placement: .topBarTrailing) {

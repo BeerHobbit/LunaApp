@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct ImageSelectionView<ImageType: ImageResourceProviding>:
-    View {
+struct ImageSelectionView<ImageType: ImageResourceProviding>: View {
+    
     private let title: String?
     private let images: [ImageType]
     @Binding var selected: ImageType
@@ -9,44 +9,59 @@ struct ImageSelectionView<ImageType: ImageResourceProviding>:
     private let visibleItems: Int
     private let widthMultiplier: CGFloat
     
+    private var stackSpacing: CGFloat {
+        AppTheme.Spacings.small
+    }
+    private let overlayOpacity: Double = 0.3
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacings.small) {
             if let title {
                 Text(title)
                     .font(AppFont.medium)
-                    .padding(.horizontal)
+                    .padding(.horizontal, AppTheme.Spacings.large)
             }
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(alignment: .bottom, spacing: 8) {
-                    ForEach(images, id: \.rawValue) { image in
-                        Image(image.previewImage)
-                            .resizable()
-                            .aspectRatio(aspectRatio, contentMode: .fit)
-                            .containerRelativeFrame(.horizontal) { width, _ in
-                                width / CGFloat(visibleItems) * widthMultiplier
-                            }
-                            .overlay {
-                                if image == selected {
-                                    ZStack {
-                                        Color.LunaColors.darkGray
-                                            .opacity(0.5)
-                                        Image(.check)
-                                            .resizable()
-                                            .padding(8)
-                                            .frame(width: 44, height: 44)
-                                            .foregroundStyle(Color.LunaColors.white)
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(alignment: .center, spacing: stackSpacing) {
+                        ForEach(images, id: \.rawValue) { image in
+                            Image(image.previewImage)
+                                .resizable()
+                                .aspectRatio(aspectRatio, contentMode: .fit)
+                                .containerRelativeFrame(.horizontal) { width, _ in
+                                    let count = CGFloat(visibleItems)
+                                    let totalSpacing = (count - 1) * stackSpacing
+                                    return (width - totalSpacing) / count * widthMultiplier
+                                }
+                                .overlay {
+                                    if image == selected {
+                                        selectionOverlay()
                                     }
                                 }
-                            }
-                            .onTapGesture {
-                                selected = image
-                            }
-                        
+                                .onTapGesture {
+                                    select(image: image, proxy: proxy)
+                                }
+                        }
                     }
                 }
+                .fixedSize(horizontal: false, vertical: true)
+                .contentMargins(.horizontal, AppTheme.Spacings.large, for: .scrollContent)
             }
-            
-            .contentMargins(.horizontal, 16, for: .scrollContent)
+        }
+    }
+    
+    func selectionOverlay() -> some View {
+        ZStack {
+            Color.LunaColors.gray
+                .opacity(overlayOpacity)
+            Image(.check)
+                .resizable()
+                .padding(AppTheme.Spacings.small)
+                .frame(
+                    width: AppTheme.Components.buttonSize,
+                    height: AppTheme.Components.buttonSize
+                )
+                .foregroundStyle(Color.LunaColors.white)
         }
     }
     
@@ -69,6 +84,13 @@ struct ImageSelectionView<ImageType: ImageResourceProviding>:
         self.widthMultiplier = widthMultiplier
     }
     
+    func select(image: ImageType, proxy: ScrollViewProxy) {
+        selected = image
+        withAnimation(.easeOut(duration: AppTheme.Animations.shortDuration)) {
+            proxy.scrollTo(image.rawValue, anchor: .center)
+        }
+    }
+    
 }
 
 #Preview {
@@ -79,8 +101,8 @@ struct ImageSelectionView<ImageType: ImageResourceProviding>:
             title: "Обои",
             images: BackgroundImage.allCases,
             selected: $selected1,
-            aspectRatio: 2/1,
-            visibleItems: 1,
+            aspectRatio: 1/2,
+            visibleItems: 2,
             widthMultiplier: 0.8
         )
         ImageSelectionView(
