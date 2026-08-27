@@ -2,17 +2,20 @@ import SwiftUI
 
 struct ImageSelectionView<ImageType: ImageResourceProviding>: View {
     
+    // MARK: - Private Propeties
+    
+    @Binding private var selected: ImageType
     private let title: String?
     private let images: [ImageType]
-    @Binding var selected: ImageType
     private let aspectRatio: CGFloat
     private let visibleItems: Int
     private let widthMultiplier: CGFloat
-    
+    private let overlayOpacity: Double = 0.3
     private var stackSpacing: CGFloat {
         AppTheme.Spacings.small
     }
-    private let overlayOpacity: Double = 0.3
+    
+    // MARK: - Body
     
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacings.small) {
@@ -50,7 +53,9 @@ struct ImageSelectionView<ImageType: ImageResourceProviding>: View {
         }
     }
     
-    func selectionOverlay() -> some View {
+    // MARK: - Views
+    
+    private func selectionOverlay() -> some View {
         ZStack {
             Color.LunaColors.gray
                 .opacity(overlayOpacity)
@@ -64,6 +69,8 @@ struct ImageSelectionView<ImageType: ImageResourceProviding>: View {
                 .foregroundStyle(Color.LunaColors.white)
         }
     }
+    
+    // MARK: - Init
     
     init(
         title: String?,
@@ -84,7 +91,9 @@ struct ImageSelectionView<ImageType: ImageResourceProviding>: View {
         self.widthMultiplier = widthMultiplier
     }
     
-    func select(image: ImageType, proxy: ScrollViewProxy) {
+    // MARK: - Private Methods
+    
+    private func select(image: ImageType, proxy: ScrollViewProxy) {
         selected = image
         withAnimation(.easeOut(duration: AppTheme.Animations.shortDuration)) {
             proxy.scrollTo(image.rawValue, anchor: .center)

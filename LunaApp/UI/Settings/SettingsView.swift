@@ -2,17 +2,26 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    // MARK: - Private Properties
+    
     @Bindable private var viewModel: SettingsViewModel
     @Environment(\.dismiss) private var dismiss
     private let backgrounds: [BackgroundImage] = BackgroundImage.allCases
     private let lunaBackgrounds: [LunaBackgroundImage] = LunaBackgroundImage.allCases
+    private let bgRatio: CGFloat = 1/2
+    private let bgItems: Int = 2
+    private let lunaBgRatio: CGFloat = 2/1
+    private let lunaBgItems: Int = 1
+    private let widthMultiplier: CGFloat = 0.8
+    
+    // MARK: - Body
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 16) {
+                VStack(spacing: AppTheme.Spacings.large) {
                     Toggle(isOn: $viewModel.settings.shouldSave) {
-                        Text("Сохранять сообщения")
+                        Text(.settingsSaveMessages)
                     }
                     .font(AppFont.medium)
                     .foregroundStyle(Color.LunaColors.white)
@@ -20,35 +29,34 @@ struct SettingsView: View {
                     .padding(.horizontal)
                     
                     ImageSelectionView(
-                        title: "Обои",
+                        title: String(localized: .settingsWallpapers),
                         images: backgrounds,
                         selected: $viewModel.settings.background,
-                        aspectRatio: 1/2,
-                        visibleItems: 2,
-                        widthMultiplier: 0.8
+                        aspectRatio: bgRatio,
+                        visibleItems: bgItems,
+                        widthMultiplier: widthMultiplier
                     )
                     ImageSelectionView(
-                        title: "Обои Луны",
+                        title: String(localized: .settingsLunaWallpapers),
                         images: lunaBackgrounds,
                         selected: $viewModel.settings.lunaBackground,
-                        aspectRatio: 2/1,
-                        visibleItems: 1,
-                        widthMultiplier: 0.8
+                        aspectRatio: lunaBgRatio,
+                        visibleItems: lunaBgItems,
+                        widthMultiplier: widthMultiplier
                     )
                 }
             }
             .safeAreaInset(edge: .bottom, spacing: .zero) {
-                VStack(spacing: 0) {
+                VStack(spacing: .zero) {
                     Button {
                         viewModel.saveChanges()
                         dismiss()
                     } label: {
-                        Text("Сохранить")
+                        Text(.settingsSave)
                     }
+                    .disabled(!viewModel.hasChanges)
                     .font(AppFont.medium)
                     .tint(Color.LunaColors.black)
-                    .disabled(!viewModel.hasChanges)
-                    
                     .frame(height: AppTheme.Components.buttonSize)
                     .frame(maxWidth: .infinity)
                     .background(Color.LunaColors.white)
@@ -69,6 +77,8 @@ struct SettingsView: View {
             )
         }
     }
+    
+    // MARK: - Views
     
     @ToolbarContentBuilder
     private func toolbarItems() -> some ToolbarContent {
@@ -94,10 +104,12 @@ struct SettingsView: View {
         }
     }
     
+    // MARK: - Init
+    
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
     }
-
+    
 }
 
 #Preview {
