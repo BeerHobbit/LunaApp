@@ -45,6 +45,9 @@ struct MessageListView: View {
             .onChange(of: isFocused) {
                 scrollToBottomOnFocus(proxy)
             }
+            .onAppear {
+                scrollToBottom(proxy)
+            }
         }
     }
     

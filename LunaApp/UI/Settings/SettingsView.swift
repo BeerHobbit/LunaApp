@@ -9,52 +9,58 @@ struct SettingsView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 16) {
-                Toggle(isOn: $viewModel.settings.shouldSave) {
-                    Text("Сохранять сообщения")
+            ScrollView {
+                VStack(spacing: 16) {
+                    Toggle(isOn: $viewModel.settings.shouldSave) {
+                        Text("Сохранять сообщения")
+                    }
+                    .font(AppFont.medium)
+                    .foregroundStyle(Color.LunaColors.white)
+                    .tint(Color.LunaColors.violet)
+                    .padding(.horizontal)
+                    
+                    ImageSelectionView(
+                        title: "Обои",
+                        images: backgrounds,
+                        selected: $viewModel.settings.background,
+                        aspectRatio: 1/2,
+                        visibleItems: 2,
+                        widthMultiplier: 0.8
+                    )
+                    ImageSelectionView(
+                        title: "Обои Луны",
+                        images: lunaBackgrounds,
+                        selected: $viewModel.settings.lunaBackground,
+                        aspectRatio: 2/1,
+                        visibleItems: 1,
+                        widthMultiplier: 0.8
+                    )
                 }
-                .font(AppFont.medium)
-                .foregroundStyle(Color.LunaColors.white)
-                .tint(Color.LunaColors.violet)
-                .padding(.horizontal)
-                
-                ImageSelectionView(
-                    title: "Обои",
-                    images: backgrounds,
-                    selected: $viewModel.settings.background,
-                    aspectRatio: 1/2,
-                    visibleItems: 2,
-                    widthMultiplier: 0.8
-                )
-                ImageSelectionView(
-                    title: "Обои Луны",
-                    images: lunaBackgrounds,
-                    selected: $viewModel.settings.lunaBackground,
-                    aspectRatio: 2/1,
-                    visibleItems: 1,
-                    widthMultiplier: 0.8
-                )
-                
-                Spacer()
-                Button {
-                    viewModel.saveChanges()
-                    dismiss()
-                } label: {
-                    Text("Сохранить")
+            }
+            .safeAreaInset(edge: .bottom, spacing: .zero) {
+                VStack(spacing: 0) {
+                    Button {
+                        viewModel.saveChanges()
+                        dismiss()
+                    } label: {
+                        Text("Сохранить")
+                    }
+                    .font(AppFont.medium)
+                    .tint(Color.LunaColors.black)
+                    .disabled(!viewModel.hasChanges)
+                    
+                    .frame(height: AppTheme.Components.buttonSize)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.LunaColors.white)
+                    .padding(.horizontal, AppTheme.Spacings.large)
+                    .padding(.vertical, AppTheme.Spacings.medium)
                 }
-                .font(AppFont.medium)
-                .tint(Color.LunaColors.black)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(
-                    Color.LunaColors.white
-                )
-                .disabled(!viewModel.hasChanges)
-                .padding()
+                .background(Color.LunaColors.darkGray)
             }
             .toolbar {
                 toolbarItems()
             }
+            .scrollBounceBehavior(.basedOnSize)
             .preferredColorScheme(.dark)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
