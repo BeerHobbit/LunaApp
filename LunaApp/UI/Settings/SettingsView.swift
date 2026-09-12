@@ -8,11 +8,11 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     private let backgrounds: [BackgroundImage] = BackgroundImage.allCases
     private let lunaBackgrounds: [LunaBackgroundImage] = LunaBackgroundImage.allCases
-    private let bgRatio: CGFloat = 1/2
-    private let bgItems: Int = 2
-    private let lunaBgRatio: CGFloat = 2/1
-    private let lunaBgItems: Int = 1
-    private let widthMultiplier: CGFloat = 0.8
+    private static let bgRatio: CGFloat = 1/2
+    private static let bgItems: Int = 2
+    private static let lunaBgRatio: CGFloat = 2/1
+    private static let lunaBgItems: Int = 1
+    private static let widthMultiplier: CGFloat = 0.8
     
     // MARK: - Body
     
@@ -23,26 +23,25 @@ struct SettingsView: View {
                     Toggle(isOn: $viewModel.settings.shouldSave) {
                         Text(.settingsSaveMessages)
                     }
+                    .toggleStyle(AppToggleStyle())
                     .font(AppFont.medium)
-                    .foregroundStyle(Color.LunaColors.white)
-                    .tint(Color.LunaColors.violet)
-                    .padding(.horizontal)
+                    .padding(.horizontal, AppTheme.Spacings.large)
                     
                     ImageSelectionView(
                         title: String(localized: .settingsWallpapers),
                         images: backgrounds,
                         selected: $viewModel.settings.background,
-                        aspectRatio: bgRatio,
-                        visibleItems: bgItems,
-                        widthMultiplier: widthMultiplier
+                        aspectRatio: SettingsView.bgRatio,
+                        visibleItems: SettingsView.bgItems,
+                        widthMultiplier: SettingsView.widthMultiplier
                     )
                     ImageSelectionView(
                         title: String(localized: .settingsLunaWallpapers),
                         images: lunaBackgrounds,
                         selected: $viewModel.settings.lunaBackground,
-                        aspectRatio: lunaBgRatio,
-                        visibleItems: lunaBgItems,
-                        widthMultiplier: widthMultiplier
+                        aspectRatio: SettingsView.lunaBgRatio,
+                        visibleItems: SettingsView.lunaBgItems,
+                        widthMultiplier: SettingsView.widthMultiplier
                     )
                 }
             }

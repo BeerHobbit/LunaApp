@@ -20,8 +20,8 @@ final class ChatViewModel {
     private let settingsStorage: SettingsStorageServiceProtocol
     private let storageFactory: MessageStorageFactoryProtocol
     private var storage: MessageStorageServiceProtocol
-    private let glitchingTime: Double = 0.75
     private var cancellables = Set<AnyCancellable>()
+    private static let glitchingTime: Double = 0.75
     
     // MARK: - Init
     
@@ -57,7 +57,7 @@ final class ChatViewModel {
             lunaState.isGlitched = true
             defer { lunaState.isGlitched = false }
             
-            try? await Task.sleep(for: .seconds(glitchingTime))
+            try? await Task.sleep(for: .seconds(ChatViewModel.glitchingTime))
         }
     }
     
@@ -129,7 +129,7 @@ final class ChatViewModel {
     }
     
     private func simulateLunaAnswer() async {
-        try? await Task.sleep(for: .seconds(glitchingTime))
+        try? await Task.sleep(for: .seconds(ChatViewModel.glitchingTime))
         addMockAnswer()
     }
     

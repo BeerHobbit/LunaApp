@@ -8,7 +8,7 @@ struct IsTypingView: View {
     
     // MARK: - Private Properties
     
-    private let viewOpacity: Double = 0.65
+    private static let viewOpacity: Double = 0.65
     
     // MARK: - Body
     
@@ -22,7 +22,7 @@ struct IsTypingView: View {
             Spacer()
         }
         .animation(.easeInOut(duration: AppTheme.Animations.shortDuration)) {
-            $0.opacity(isTyping ? viewOpacity : .zero)
+            $0.opacity(isTyping ? IsTypingView.viewOpacity : .zero)
         }
     }
     

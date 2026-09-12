@@ -10,7 +10,7 @@ struct MessageInputView: View {
     
     // MARK: - Private Properties
     
-    private let lineLimit: Int = 6
+    private static let lineLimit: Int = 6
     private var buttonImageStyle: Color {
         state.sendingIsDisabled ? Color.LunaColors.gray : Color.LunaColors.black
     }
@@ -27,7 +27,7 @@ struct MessageInputView: View {
                 axis: .vertical
             )
             .font(AppFont.medium)
-            .lineLimit(lineLimit)
+            .lineLimit(MessageInputView.lineLimit)
             .padding(AppTheme.Spacings.medium)
             .foregroundStyle(Color.LunaColors.white)
             .focused($isFocused)

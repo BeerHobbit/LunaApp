@@ -8,15 +8,20 @@ struct LunaView: View {
     let background: LunaBackgroundImage
     let onImageTap: (() -> Void)
     
+    // MARK: - Private Properties
+    
+    private static let backgroundRatio: CGFloat = 2
+    private static let lunaRatio: CGFloat = 1
+    
     // MARK: - Body
     
     var body: some View {
         Image(background.image)
             .resizable()
-            .aspectRatio(2, contentMode: .fit)
+            .aspectRatio(LunaView.backgroundRatio, contentMode: .fit)
             .overlay(alignment: .bottom) {
                 APNGView(image: state.animatedImage)
-                    .aspectRatio(1, contentMode: .fit)
+                    .aspectRatio(LunaView.lunaRatio, contentMode: .fit)
                     .onTapGesture { onImageTap() }
             }
             .clipped()

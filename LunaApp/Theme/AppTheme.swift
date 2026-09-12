@@ -2,6 +2,7 @@ import SwiftUI
 
 enum AppTheme {
     enum Spacings {
+        static let xxxSmall: CGFloat = 2
         static let xxSmall: CGFloat = 3
         static let xSmall: CGFloat = 6
         static let small: CGFloat = 8
@@ -20,6 +21,9 @@ enum AppTheme {
         
         static let sendButtonHeight: CGFloat = 44
         static let sendButtonWidth: CGFloat = 60
+        
+        static let toggleHeight: CGFloat = 30
+        static let toggleWidth: CGFloat = 52
     }
     
     enum Animations {
