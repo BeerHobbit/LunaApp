@@ -24,9 +24,8 @@ struct SettingsView: View {
                         Text(.settingsSaveMessages)
                     }
                     .toggleStyle(AppToggleStyle())
-                    .font(AppFont.medium)
                     .padding(.horizontal, AppTheme.Spacings.large)
-                    
+            
                     ImageSelectionView(
                         title: String(localized: .settingsWallpapers),
                         images: backgrounds,
@@ -47,33 +46,29 @@ struct SettingsView: View {
             }
             .safeAreaInset(edge: .bottom, spacing: .zero) {
                 VStack(spacing: .zero) {
-                    Button {
+                    Button(.settingsSave) {
                         viewModel.saveChanges()
                         dismiss()
-                    } label: {
-                        Text(.settingsSave)
                     }
+                    .buttonStyle(SettingsButtonStyle())
                     .disabled(!viewModel.hasChanges)
-                    .font(AppFont.medium)
-                    .tint(Color.LunaColors.black)
-                    .frame(height: AppTheme.Components.buttonSize)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.LunaColors.white)
-                    .padding(.horizontal, AppTheme.Spacings.large)
-                    .padding(.vertical, AppTheme.Spacings.medium)
                 }
                 .background(Color.LunaColors.darkGray)
+                .padding(.horizontal, AppTheme.Spacings.large)
+                .padding(.vertical, AppTheme.Spacings.medium)
             }
             .toolbar {
                 toolbarItems()
             }
+            .background {
+                Color.LunaColors.darkGray
+                    .ignoresSafeArea()
+            }
+            .contentMargins(.top, AppTheme.Spacings.medium, for: .scrollContent)
+            .toolbarTitleDisplayMode(.inline)
             .scrollBounceBehavior(.basedOnSize)
             .preferredColorScheme(.dark)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(
-                Color.LunaColors.darkGray
-                    .ignoresSafeArea()
-            )
         }
     }
     

@@ -22,7 +22,6 @@ struct ChatView: View {
                 viewModel.glitchLuna()
             }
             .background(AppTheme.Effects.standardShadow)
-            .zIndex(1)
             .overlay(alignment: .top) {
                 MenuView(
                     isEmpty: isMessagesEmpty,
@@ -37,6 +36,8 @@ struct ChatView: View {
             }
             .padding(.horizontal, AppTheme.Spacings.large)
             .padding(.top, AppTheme.Spacings.medium)
+            .zIndex(1)
+            .layoutPriority(1)
             
             MessageListView(
                 messages: viewModel.messages,

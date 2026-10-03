@@ -18,6 +18,7 @@ struct AppToggleStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
         HStack {
             configuration.label
+                .font(AppFont.medium)
             Spacer()
             ZStack {
                 Rectangle()
@@ -30,16 +31,16 @@ struct AppToggleStyle: ToggleStyle {
                             .frame(width: AppTheme.Components.toggleHeight, height: AppTheme.Components.toggleHeight)
                             .scaleEffect(scale)
                             .opacity(opacity)
-                            .animation(.default, value: isPressed)
+                            .animation(.easeInOut(duration: AppTheme.Animations.shortDuration), value: isPressed)
                     }
             }
             .frame(height: AppTheme.Components.buttonSize)
             .contentShape(Rectangle())
-            .animation(.easeOut, value: configuration.isOn)
+            .animation(.easeInOut(duration: AppTheme.Animations.duration), value: configuration.isOn)
             .onTapGesture {
                 configuration.isOn.toggle()
             }
-            .onLongPressGesture(minimumDuration: AppToggleStyle.gestureDuration) {
+            .onLongPressGesture(minimumDuration: Self.gestureDuration) {
                 configuration.isOn.toggle()
             } onPressingChanged: { pressing in
                 isPressed = pressing

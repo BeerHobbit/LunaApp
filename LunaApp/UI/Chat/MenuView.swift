@@ -31,7 +31,6 @@ struct MenuView: View {
     
     // MARK: - Views
     
-    @ViewBuilder
     private func menuButton(image: ImageResource, action: @escaping () -> Void) -> some View {
         Button {
             action()
