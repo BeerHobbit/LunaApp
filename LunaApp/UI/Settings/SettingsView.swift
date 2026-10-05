@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     private let backgrounds: [BackgroundImage] = BackgroundImage.allCases
     private let lunaBackgrounds: [LunaBackgroundImage] = LunaBackgroundImage.allCases
+    
     private static let bgRatio: CGFloat = 1/2
     private static let bgItems: Int = 2
     private static let lunaBgRatio: CGFloat = 2/1
@@ -25,7 +26,7 @@ struct SettingsView: View {
                     }
                     .toggleStyle(AppToggleStyle())
                     .padding(.horizontal, AppTheme.Spacings.large)
-            
+                    
                     ImageSelectionView(
                         title: String(localized: .settingsWallpapers),
                         images: backgrounds,
@@ -47,15 +48,14 @@ struct SettingsView: View {
             .safeAreaInset(edge: .bottom, spacing: .zero) {
                 VStack(spacing: .zero) {
                     Button(.settingsSave) {
-                        viewModel.saveChanges()
-                        dismiss()
+                        confirmChanges()
                     }
                     .buttonStyle(SettingsButtonStyle())
                     .disabled(!viewModel.hasChanges)
                 }
                 .background(Color.LunaColors.darkGray)
                 .padding(.horizontal, AppTheme.Spacings.large)
-                .padding(.vertical, AppTheme.Spacings.medium)
+                .padding(.top, AppTheme.Spacings.medium)
             }
             .toolbar {
                 toolbarItems()
@@ -69,6 +69,11 @@ struct SettingsView: View {
             .scrollBounceBehavior(.basedOnSize)
             .preferredColorScheme(.dark)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .alert(.alertStorageChangeTitle, isPresented: $viewModel.isStorageChangeAlertPresented) {
+                storageChangeAlertButtons()
+            } message: {
+                Text(.alertStorageChangeMessage)
+            }
         }
     }
     
@@ -98,10 +103,33 @@ struct SettingsView: View {
         }
     }
     
+    @ViewBuilder
+    private func storageChangeAlertButtons() -> some View {
+        Button(.alertContinue) {
+            saveAndDismiss()
+        }
+        Button(.alertCancel, role: .cancel) {}
+    }
+    
     // MARK: - Init
     
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
+    }
+    
+    // MARK: - Private Methods
+    
+    private func confirmChanges() {
+        if viewModel.hasStorageChanges {
+            viewModel.isStorageChangeAlertPresented = true
+        } else {
+            saveAndDismiss()
+        }
+    }
+    
+    private func saveAndDismiss() {
+        viewModel.saveChanges()
+        dismiss()
     }
     
 }

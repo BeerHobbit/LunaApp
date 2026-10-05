@@ -34,7 +34,8 @@ struct ImageSelectionView<ImageType: ImageResourceProviding>: View {
                                 .containerRelativeFrame(.horizontal) { width, _ in
                                     let count = CGFloat(visibleItems)
                                     let totalSpacing = (count - 1) * stackSpacing
-                                    return (width - totalSpacing) / count * widthMultiplier
+                                    let availableWidth = max(0, width - totalSpacing)
+                                    return availableWidth / count * widthMultiplier
                                 }
                                 .overlay {
                                     if image == selected {

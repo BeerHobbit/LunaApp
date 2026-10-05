@@ -7,7 +7,7 @@ struct ChatView: View {
     @Bindable private var viewModel: ChatViewModel
     @FocusState private var isFocused: Bool
     @Environment(DependencyContainer.self) private var container
-    @State private var showDeleteAllAlert = false
+    @State private var showDeleteAllAlert: Bool = false
     @State private var showSettings: Bool = false
     private var isMessagesEmpty: Bool { viewModel.messages.isEmpty }
     

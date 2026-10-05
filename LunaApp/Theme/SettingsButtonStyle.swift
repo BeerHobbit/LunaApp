@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SettingsButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) var isEnabled: Bool
-    private static let opacity: Double = 0.65
+    private static let opacity: Double = 0.6
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

@@ -11,6 +11,10 @@ final class SettingsViewModel {
     var hasChanges: Bool {
         settings != savedSettings
     }
+    var isStorageChangeAlertPresented: Bool = false
+    var hasStorageChanges: Bool {
+        settings.shouldSave != savedSettings.shouldSave
+    }
     
     // MARK: - Private Properties
     

@@ -55,6 +55,23 @@
         }
       }
     },
+    "alert.continue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжить"
+          }
+        }
+      }
+    },
     "alert.deleteAll" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -102,6 +119,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ОК"
+          }
+        }
+      }
+    },
+    "alert.storageChange.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changing the save settings will delete all current messages and erase Luna's memory."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменение настроек сохранения приведет к удалению всех текущих сообщений и потере памяти Луны."
+          }
+        }
+      }
+    },
+    "alert.storageChange.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы уверены?"
           }
         }
       }
