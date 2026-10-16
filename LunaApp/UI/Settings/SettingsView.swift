@@ -55,7 +55,7 @@ struct SettingsView: View {
                 }
                 .background(Color.LunaColors.darkGray)
                 .padding(.horizontal, AppTheme.Spacings.large)
-                .padding(.top, AppTheme.Spacings.medium)
+                .padding(.vertical, AppTheme.Spacings.medium)
             }
             .toolbar {
                 toolbarItems()
