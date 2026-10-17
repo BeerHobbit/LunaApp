@@ -1,5 +1,6 @@
 import Foundation
 import RealmSwift
+import Realm
 
 final class MessageObject: Object {
     @Persisted(primaryKey: true) var id: UUID
