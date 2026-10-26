@@ -2,51 +2,32 @@ import DeveloperToolsSupport
 
 protocol ImageResourceProviding: Equatable, CaseIterable, RawRepresentable where RawValue == String {
     var image: ImageResource { get }
-    var previewImage: ImageResource { get }
 }
 
-// TODO: Replace mock cases and images with actual ones
 enum BackgroundImage: String, ImageResourceProviding {
-    case retrowaveGrid
+    case horizon
     case microchip
-    case wires
+    case wire
     
     var image: ImageResource {
         switch self {
-        case .retrowaveGrid: .retrowaveGrid
-        case .microchip: .microchipTemp
-        case .wires: .wiresTemp
-        }
-    }
-    
-    var previewImage: ImageResource {
-        switch self {
-        case .retrowaveGrid: .retrowaveGrid
-        case .microchip: .microchipTemp
-        case .wires: .wiresTemp
+        case .horizon: .horizonBackground
+        case .microchip: .microchipBackground
+        case .wire: .wireBackground
         }
     }
 }
 
-// TODO: Replace mock cases and images with actual ones
 enum LunaBackgroundImage: String, ImageResourceProviding {
-    case window
     case room
+    case roof
     case cyberspace
     
     var image: ImageResource {
         switch self {
-        case .window: .lunaViewBackground
-        case .room: .roomTemp
-        case .cyberspace: .cyberspaceTemp
-        }
-    }
-    
-    var previewImage: ImageResource {
-        switch self {
-        case .window: .lunaViewBackground
-        case .room: .roomTemp
-        case .cyberspace: .cyberspaceTemp
+        case .room: .room
+        case .roof: .roof
+        case .cyberspace: .cyberspace
         }
     }
 }

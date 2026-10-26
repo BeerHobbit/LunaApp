@@ -53,8 +53,8 @@ final class SettingsStorageService: SettingsStorageServiceProtocol {
         
         return Settings(
             shouldSave: shouldSave,
-            background: BackgroundImage(rawValue: backgroundString) ?? .retrowaveGrid,
-            lunaBackground: LunaBackgroundImage(rawValue: lunaBackgroundString) ?? .window
+            background: BackgroundImage(rawValue: backgroundString) ?? .horizon,
+            lunaBackground: LunaBackgroundImage(rawValue: lunaBackgroundString) ?? .room
         )
     }
     
@@ -63,8 +63,8 @@ final class SettingsStorageService: SettingsStorageServiceProtocol {
     private func registerDefaultValues() {
         defaults.register(defaults: [
             Keys.shouldSave.rawValue: true,
-            Keys.background.rawValue: BackgroundImage.retrowaveGrid.rawValue,
-            Keys.lunaBackground.rawValue: LunaBackgroundImage.window.rawValue
+            Keys.background.rawValue: BackgroundImage.horizon.rawValue,
+            Keys.lunaBackground.rawValue: LunaBackgroundImage.room.rawValue
         ])
     }
     

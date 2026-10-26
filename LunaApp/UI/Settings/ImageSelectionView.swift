@@ -28,7 +28,7 @@ struct ImageSelectionView<ImageType: ImageResourceProviding>: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(alignment: .center, spacing: stackSpacing) {
                         ForEach(images, id: \.rawValue) { image in
-                            Image(image.previewImage)
+                            Image(image.image)
                                 .resizable()
                                 .aspectRatio(aspectRatio, contentMode: .fit)
                                 .containerRelativeFrame(.horizontal) { width, _ in
@@ -104,8 +104,8 @@ struct ImageSelectionView<ImageType: ImageResourceProviding>: View {
 }
 
 #Preview {
-    @Previewable @State var selected1 = BackgroundImage.retrowaveGrid
-    @Previewable @State var selected2 = LunaBackgroundImage.window
+    @Previewable @State var selected1 = BackgroundImage.horizon
+    @Previewable @State var selected2 = LunaBackgroundImage.room
     VStack(spacing: 16) {
         ImageSelectionView(
             title: "Обои",
