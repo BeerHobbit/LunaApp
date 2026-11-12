@@ -31,25 +31,4 @@ enum AppTheme {
         static let shortDuration: Double = 0.15
         static let duration: Double = 0.3
     }
-    
-    enum Effects {
-        static var standardShadow: some ShapeStyle {
-            Color.LunaColors.gray
-                .shadow(
-                    .drop(
-                        color: Color.LunaColors.black.opacity(0.35),
-                        radius: 0,
-                        x: 0,
-                        y: 6
-                    )
-                )
-        }
-    }
-    
-    enum SystemIcons {
-        static let copy: String = "document.on.document"
-        static let delete: String = "trash"
-        static let ellipsis: String = "ellipsis"
-    }
-    
 }

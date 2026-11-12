@@ -1,7 +1,7 @@
 import Foundation
 import RealmSwift
 
-enum Sender: String, PersistableEnum {
+enum Sender: String, PersistableEnum, Codable {
     case user
     case luna
 }
@@ -19,5 +19,28 @@ extension Message {
         self.text = realmObject.text
         self.sender = realmObject.sender
         self.createdAt = realmObject.createdAt
+    }
+}
+
+extension Message: Codable {
+    enum CodingKeys: String, CodingKey {
+        case text
+        case sender
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.id = UUID()
+        self.text = try container.decode(String.self, forKey: .text)
+        self.sender = try container.decode(Sender.self, forKey: .sender)
+        self.createdAt = .now
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(text, forKey: .text)
+        try container.encode(sender, forKey: .sender)
     }
 }

@@ -157,7 +157,58 @@
         }
       }
     },
-    "error.message.notFound" : {
+    "error.decodingError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to process the server response"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось обработать ответ сервера"
+          }
+        }
+      }
+    },
+    "error.httpError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server error: %lld"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка сервера: %lld"
+          }
+        }
+      }
+    },
+    "error.invalidResponse" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid server response"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Некорректный ответ сервера"
+          }
+        }
+      }
+    },
+    "error.messageNotFound" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

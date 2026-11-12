@@ -21,7 +21,7 @@ struct ChatView: View {
             ) {
                 viewModel.glitchLuna()
             }
-            .background(AppTheme.Effects.standardShadow)
+            .background(AppEffects.standardShadow)
             .overlay(alignment: .top) {
                 MenuView(
                     isEmpty: isMessagesEmpty,

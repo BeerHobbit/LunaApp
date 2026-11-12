@@ -65,11 +65,11 @@ struct MessageBubbleView: View {
     private func menuButtons() -> some View {
         Button(
             .menuCopy,
-            systemImage: AppTheme.SystemIcons.copy
+            systemImage: SystemIcons.copy
         ) { onCopy(message) }
         Button(
             .menuDelete,
-            systemImage: AppTheme.SystemIcons.delete,
+            systemImage: SystemIcons.delete,
             role: .destructive
         ) { onDelete(message) }
     }

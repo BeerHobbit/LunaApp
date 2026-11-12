@@ -14,7 +14,7 @@ struct IsTypingView: View {
     
     var body: some View {
         HStack(spacing: AppTheme.Spacings.xSmall) {
-            Image(systemName: AppTheme.SystemIcons.ellipsis)
+            Image(systemName: SystemIcons.ellipsis)
                 .symbolEffect(.variableColor.iterative.dimInactiveLayers.nonReversing)
             Text(.isTyping)
                 .font(AppFont.regular)
