@@ -17,7 +17,9 @@ final class InMemoryMessageStorageService: MessageStorageServiceProtocol {
     }
     
     func save(_ message: Message) throws {
-        messages.append(message)
+        if !messages.contains(where: { $0.id == message.id }) {
+            messages.append(message)
+        }
     }
     
     func delete(_ message: Message) throws {

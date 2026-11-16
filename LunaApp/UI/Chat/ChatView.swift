@@ -82,20 +82,13 @@ struct ChatView: View {
         .alert(.alertDeleteAll, isPresented: $showDeleteAllAlert) {
             deleteAllAlertButtons
         }
-        .alert(
-            viewModel.errorAlert?.title ?? "",
-            isPresented: $viewModel.isErrorAlertPresented,
-            presenting: viewModel.errorAlert
-        ) { _ in
-            Button(.alertOk) {
-                viewModel.errorAlert = nil
-            }
-        } message: { alert in
-            Text(alert.message)
-        }
         .sheet(isPresented: $showSettings) {
             SettingsView(viewModel: container.makeSettingsViewModel())
         }
+        
+
+        
+        .alert(.alertError, item: $viewModel.errorAlert, actions: { _ in }, message: { _ in })
         
     }
     

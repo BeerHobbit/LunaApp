@@ -13,7 +13,6 @@ final class ChatViewModel {
     private(set) var settings: Settings
     var inputState: InputState = InputState(input: "")
     var errorAlert: AlertState?
-    var isErrorAlertPresented: Bool = false
     
     // MARK: - Private Properties
     
@@ -42,27 +41,22 @@ final class ChatViewModel {
             self.storage = try storageFactory.makeStorage(shouldSave: savedSettings.shouldSave)
         } catch {
             self.storage = InMemoryMessageStorageService()
-            handleError(error)
+            handleError(
+                error,
+                retryAction: { [weak self] in
+                    self?.changeStorage(shouldSave: savedSettings.shouldSave)
+                })
         }
         addGreetingIfNeeded()
-        observeSettings()
         observeMessages()
+        observeSettings()
     }
     
     // MARK: - Public Methods
     
     func sendMessage() {
         guard let message = makeUserMessage() else { return }
-        
-        Task {
-            do {
-                try storage.save(message)
-                let history = try storage.fetchLastMessages(limit: Self.historyLimit)
-                try await fetchReply(history: history)
-            } catch {
-                handleError(error)
-            }
-        }
+        processMessage(message)
     }
     
     func glitchLuna() {
@@ -78,7 +72,11 @@ final class ChatViewModel {
         do {
             try storage.delete(message)
         } catch {
-            handleError(error)
+            handleError(
+                error,
+                retryAction: { [weak self] in
+                    self?.deleteMessage(message)
+                })
         }
     }
     
@@ -86,7 +84,11 @@ final class ChatViewModel {
         do {
             try storage.deleteAll()
         } catch {
-            handleError(error)
+            handleError(
+                error,
+                retryAction: { [weak self] in
+                    self?.deleteAllMessages()
+                })
         }
     }
     
@@ -100,7 +102,11 @@ final class ChatViewModel {
             case .success(let messages):
                 self.messages = messages
             case .failure(let error):
-                handleError(error)
+                handleError(
+                    error,
+                    retryAction: { [weak self] in
+                        self?.observeMessages()
+                    })
             }
         }
     }
@@ -121,18 +127,14 @@ final class ChatViewModel {
     }
     
     private func addGreetingIfNeeded() {
-        do {
-            guard try storage.isEmpty() else { return }
-            let message = Message(
-                id: UUID(),
-                text: String(localized: .messageGreeting),
-                sender: .luna,
-                createdAt: Date.now
-            )
-            try storage.save(message)
-        } catch {
-            handleError(error)
-        }
+        guard storage.isEmpty() else { return }
+        let message = Message(
+            id: UUID(),
+            text: String(localized: .messageGreeting),
+            sender: .luna,
+            createdAt: Date.now
+        )
+        try? storage.save(message)
     }
     
     private func makeUserMessage() -> Message? {
@@ -146,6 +148,27 @@ final class ChatViewModel {
             sender: .user,
             createdAt: .now
         )
+    }
+    
+    private func processMessage(_ message: Message) {
+        Task { [weak self] in
+            guard let self else { return }
+            
+            do {
+                try storage.save(message)
+                let history = storage.fetchLastMessages(limit: Self.historyLimit)
+                try await fetchReply(history: history)
+            } catch {
+                handleError(
+                    error,
+                    retryAction: { [weak self] in
+                        self?.processMessage(message)
+                    },
+                    cancelAction: { [weak self] in
+                        self?.cancelMessage(message)
+                    })
+            }
+        }
     }
     
     private func fetchReply(history: [Message]) async throws {
@@ -166,22 +189,37 @@ final class ChatViewModel {
         lunaState.emotion = LunaEmotion.allCases.randomElement() ?? .greetings
     }
     
-    private func handleError(_ error: Error, title: String? = nil) {
+    private func handleError(
+        _ error: Error,
+        retryAction: (() -> Void)? = nil,
+        cancelAction: (() -> Void)? = nil
+    ) {
         errorAlert = AlertState(
-            title: title ?? String(localized: .alertError),
-            message: error.localizedDescription
+            message: error.localizedDescription,
+            retryAction: retryAction,
+            cancelAction: cancelAction
         )
-        isErrorAlertPresented = true
+    }
+    
+    private func cancelMessage(_ message: Message) {
+        try? storage.delete(message)
+        inputState.input = message.text
     }
     
     private func changeStorage(shouldSave: Bool) {
-        deleteAllMessages()
         do {
-            storage = try storageFactory.makeStorage(shouldSave: shouldSave)
+            let newStorage = try storageFactory.makeStorage(shouldSave: shouldSave)
+            deleteAllMessages()
+            storage = newStorage
+            
             addGreetingIfNeeded()
             observeMessages()
         } catch {
-            handleError(error)
+            handleError(
+                error,
+                retryAction: { [weak self] in
+                    self?.changeStorage(shouldSave: shouldSave)
+                })
         }
     }
     

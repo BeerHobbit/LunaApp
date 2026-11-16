@@ -1,6 +1,5 @@
-import Foundation
-
 struct AlertState {
-    let title: String
     let message: String
+    let retryAction: (() -> Void)?
+    let cancelAction: (() -> Void)?
 }

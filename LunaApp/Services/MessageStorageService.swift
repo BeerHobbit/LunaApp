@@ -80,7 +80,7 @@ final class MessageStorageService: MessageStorageServiceProtocol {
     func save(_ message: Message) throws {
         do {
             try realm.write {
-                realm.add(MessageObject(from: message))
+                realm.add(MessageObject(from: message), update: .modified)
             }
         } catch {
             throw MessageStorageError.saveFailed(error)
