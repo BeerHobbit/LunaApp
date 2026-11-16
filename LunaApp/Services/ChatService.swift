@@ -4,7 +4,7 @@ protocol ChatServiceProtocol {
     func fetch(history: [Message]) async throws -> Message
 }
 
-final class ChatService {
+final class ChatService: ChatServiceProtocol {
     
     // MARK: - Private Properties
     
@@ -19,7 +19,7 @@ final class ChatService {
     // MARK: - Public Methods
     
     func fetch(history: [Message]) async throws -> Message {
-        let request = ChatRequest(bodyDTO: history)
+        let request = ChatRequest(messages: history)
         return try await client.fetch(request.buildRequest())
     }
     

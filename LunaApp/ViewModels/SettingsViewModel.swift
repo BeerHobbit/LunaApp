@@ -19,7 +19,7 @@ final class SettingsViewModel {
     // MARK: - Private Properties
     
     private var savedSettings: Settings
-    private let settingsStorage: SettingsStorageServiceProtocol
+    private let settingsStorage: any SettingsStorageServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Init

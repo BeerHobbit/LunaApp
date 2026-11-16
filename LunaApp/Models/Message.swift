@@ -6,6 +6,10 @@ enum Sender: String, PersistableEnum, Codable {
     case luna
 }
 
+struct MessagesDTO: Encodable {
+    let messages: [Message]
+}
+
 struct Message: Identifiable, Equatable {
     let id: UUID
     let text: String

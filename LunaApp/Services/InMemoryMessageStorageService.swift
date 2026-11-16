@@ -32,4 +32,8 @@ final class InMemoryMessageStorageService: MessageStorageServiceProtocol {
         messages.isEmpty
     }
     
+    func fetchLastMessages(limit: Int) throws -> [Message] {
+        messages.suffix(limit)
+    }
+    
 }

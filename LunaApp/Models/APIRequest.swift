@@ -3,7 +3,7 @@ import Foundation
 // MARK: - Protocol
 
 protocol APIRequest {
-    associatedtype DTO: Encodable
+    associatedtype DTO: Encodable = EmptyDTO
     
     static var baseURL: URL? { get }
     static var method: HTTPMethod { get }
@@ -62,3 +62,6 @@ enum RequestError: LocalizedError {
     case encodingError(Error)
 }
 
+// MARK: - EmptyDTO
+
+struct EmptyDTO: Encodable {}

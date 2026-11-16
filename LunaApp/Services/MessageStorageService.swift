@@ -10,11 +10,12 @@ protocol MessageStorageServiceProtocol: AnyObject {
     func delete(_ message: Message) throws
     func deleteAll() throws
     func isEmpty() throws -> Bool
+    func fetchLastMessages(limit: Int) throws -> [Message]
 }
 
 // MARK: - Errors
 
-enum MessagesStorageError: LocalizedError {
+enum MessageStorageError: LocalizedError {
     case messageNotFound
     
     var errorDescription: String? {
@@ -69,7 +70,7 @@ final class MessageStorageService: MessageStorageServiceProtocol {
             ofType: MessageObject.self,
             forPrimaryKey: message.id
         ) else {
-            throw MessagesStorageError.messageNotFound
+            throw MessageStorageError.messageNotFound
         }
         
         try realm.write {
@@ -90,10 +91,19 @@ final class MessageStorageService: MessageStorageServiceProtocol {
         return realm.objects(MessageObject.self).isEmpty
     }
     
+    func fetchLastMessages(limit: Int) throws -> [Message] {
+        let realm = try Realm()
+        let objects = realm.objects(MessageObject.self)
+            .sorted(by: \.createdAt, ascending: false)
+            .prefix(limit)
+            .reversed()
+        return Self.mapToMessage(objects)
+    }
+    
     // MARK: - Private Methods
     
-    private static func mapToMessage(_ results: Results<MessageObject>) -> [Message] {
-        Array(results.map { Message(from: $0)})
+    private static func mapToMessage(_ objects: some Sequence<MessageObject>) -> [Message] {
+        objects.map { Message(from: $0) }
     }
     
     // MARK: - Deinit

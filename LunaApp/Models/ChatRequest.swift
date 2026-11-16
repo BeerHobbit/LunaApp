@@ -1,12 +1,12 @@
 struct ChatRequest: APIRequest {
-    typealias DTO = [Message]
+    typealias DTO = MessagesDTO
     
     static let method: HTTPMethod = .post
     let path: String = "chat"
     let headers: [String : String]? = ["Content-Type": "application/json"]
-    let bodyDTO: [Message]?
+    let bodyDTO: DTO?
     
-    init(bodyDTO: [Message]?) {
-        self.bodyDTO = bodyDTO
+    init(messages: [Message]) {
+        self.bodyDTO = MessagesDTO(messages: messages)
     }
 }
