@@ -23,6 +23,7 @@ final class ChatViewModel {
     private var cancellables = Set<AnyCancellable>()
     private static let glitchingTime: Double = 0.75
     private static let historyLimit: Int = 20
+    private static let alertRetryDelay: Int = 300
     
     // MARK: - Init
     
@@ -196,7 +197,14 @@ final class ChatViewModel {
     ) {
         errorAlert = AlertState(
             message: error.localizedDescription,
-            retryAction: retryAction,
+            retryAction: retryAction.map { action in
+                    {
+                        Task {
+                            try? await Task.sleep(for: .milliseconds(Self.alertRetryDelay))
+                            action()
+                        }
+                    }
+            },
             cancelAction: cancelAction
         )
     }
@@ -209,7 +217,7 @@ final class ChatViewModel {
     private func changeStorage(shouldSave: Bool) {
         do {
             let newStorage = try storageFactory.makeStorage(shouldSave: shouldSave)
-            deleteAllMessages()
+            try storage.deleteAll()
             storage = newStorage
             
             addGreetingIfNeeded()

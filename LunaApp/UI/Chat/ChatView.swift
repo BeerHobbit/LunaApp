@@ -22,6 +22,7 @@ struct ChatView: View {
                 viewModel.glitchLuna()
             }
             .background(AppEffects.standardShadow)
+            .disabled(viewModel.isAnswerLoading)
             .overlay(alignment: .top) {
                 MenuView(
                     isEmpty: isMessagesEmpty,
@@ -82,14 +83,25 @@ struct ChatView: View {
         .alert(.alertDeleteAll, isPresented: $showDeleteAllAlert) {
             deleteAllAlertButtons
         }
+        .alert(
+            .alertError,
+            item: $viewModel.errorAlert,
+            actions: { alertState in
+                Button(.alertCancel, role: .cancel) {
+                    alertState.cancelAction?()
+                }
+                if let retryAction = alertState.retryAction {
+                    Button(.alertRetry) {
+                        retryAction()
+                    }
+                }
+            },
+            message: { alertState in
+                Text(alertState.message)
+            })
         .sheet(isPresented: $showSettings) {
             SettingsView(viewModel: container.makeSettingsViewModel())
         }
-        
-
-        
-        .alert(.alertError, item: $viewModel.errorAlert, actions: { _ in }, message: { _ in })
-        
     }
     
     // MARK: - Views
