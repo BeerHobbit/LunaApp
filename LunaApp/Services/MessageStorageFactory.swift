@@ -1,9 +1,11 @@
 protocol MessageStorageFactoryProtocol {
-    func makeStorage(shouldSave: Bool) -> MessageStorageServiceProtocol
+    func makeStorage(shouldSave: Bool) throws -> MessageStorageServiceProtocol
 }
 
 final class MessageStorageFactory: MessageStorageFactoryProtocol {
-    func makeStorage(shouldSave: Bool) -> any MessageStorageServiceProtocol {
-        shouldSave ? MessageStorageService() : InMemoryMessageStorageService()
+    func makeStorage(shouldSave: Bool) throws -> any MessageStorageServiceProtocol {
+        shouldSave
+        ? try MessageStorageService()
+        : InMemoryMessageStorageService()
     }
 }

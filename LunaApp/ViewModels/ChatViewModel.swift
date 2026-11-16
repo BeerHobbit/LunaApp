@@ -37,9 +37,13 @@ final class ChatViewModel {
         self.settingsStorage = settingsStorage
         self.settings = savedSettings
         self.storageFactory = storageFactory
-        self.storage = storageFactory.makeStorage(shouldSave: savedSettings.shouldSave)
         self.chatService = chatService
-        
+        do {
+            self.storage = try storageFactory.makeStorage(shouldSave: savedSettings.shouldSave)
+        } catch {
+            self.storage = InMemoryMessageStorageService()
+            handleError(error)
+        }
         addGreetingIfNeeded()
         observeSettings()
         observeMessages()
@@ -172,9 +176,13 @@ final class ChatViewModel {
     
     private func changeStorage(shouldSave: Bool) {
         deleteAllMessages()
-        storage = storageFactory.makeStorage(shouldSave: shouldSave)
-        addGreetingIfNeeded()
-        observeMessages()
+        do {
+            storage = try storageFactory.makeStorage(shouldSave: shouldSave)
+            addGreetingIfNeeded()
+            observeMessages()
+        } catch {
+            handleError(error)
+        }
     }
     
 }

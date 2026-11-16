@@ -9,39 +9,59 @@ protocol MessageStorageServiceProtocol: AnyObject {
     func save(_ message: Message) throws
     func delete(_ message: Message) throws
     func deleteAll() throws
-    func isEmpty() throws -> Bool
-    func fetchLastMessages(limit: Int) throws -> [Message]
+    func isEmpty() -> Bool
+    func fetchLastMessages(limit: Int) -> [Message]
 }
 
 // MARK: - Errors
 
 enum MessageStorageError: LocalizedError {
+    case initFailed(Error)
+    case saveFailed(Error)
+    case deleteFailed(Error)
+    case deleteAllFailed(Error)
+    case updateFailed(Error)
     case messageNotFound
     
     var errorDescription: String? {
         switch self {
-        case .messageNotFound: String(localized: .errorMessageNotFound)
+        case .initFailed(_):
+            String(localized: .errorInitFailed)
+        case .saveFailed(_):
+            String(localized: .errorSaveFailed)
+        case .deleteFailed(_):
+            String(localized: .errorDeleteFailed)
+        case .deleteAllFailed(_):
+            String(localized: .errorDeleteAllFailed)
+        case .updateFailed(_):
+            String(localized: .errorUpdateFailed)
+        case .messageNotFound:
+            String(localized: .errorMessageNotFound)
         }
     }
 }
 
+@MainActor
 final class MessageStorageService: MessageStorageServiceProtocol {
     
     // MARK: - Private Properties
     
+    private let realm: Realm
     private var token: NotificationToken?
+    
+    // MARK: - Init
+    
+    init(configuration: Realm.Configuration = .defaultConfiguration) throws {
+        do {
+            realm = try Realm(configuration: configuration)
+        } catch {
+            throw MessageStorageError.initFailed(error)
+        }
+    }
     
     // MARK: - Public Methods
     
     func startObservation(onUpdate: @escaping (Result<[Message], Error>) -> Void) {
-        let realm: Realm
-        do {
-            realm = try Realm()
-        } catch {
-            onUpdate(.failure(error))
-            return
-        }
-        
         let objects = realm.objects(MessageObject.self)
             .sorted(by: \.createdAt, ascending: true)
         
@@ -52,20 +72,22 @@ final class MessageStorageService: MessageStorageServiceProtocol {
                 let messages = Self.mapToMessage(collection)
                 onUpdate(.success(messages))
             case .error(let error):
-                onUpdate(.failure(error))
+                onUpdate(.failure(MessageStorageError.updateFailed(error)))
             }
         }
     }
     
     func save(_ message: Message) throws {
-        let realm = try Realm()
-        try realm.write {
-            realm.add(MessageObject(from: message))
+        do {
+            try realm.write {
+                realm.add(MessageObject(from: message))
+            }
+        } catch {
+            throw MessageStorageError.saveFailed(error)
         }
     }
     
     func delete(_ message: Message) throws {
-        let realm = try Realm()
         guard let object = realm.object(
             ofType: MessageObject.self,
             forPrimaryKey: message.id
@@ -73,26 +95,31 @@ final class MessageStorageService: MessageStorageServiceProtocol {
             throw MessageStorageError.messageNotFound
         }
         
-        try realm.write {
-            realm.delete(object)
+        do {
+            try realm.write {
+                realm.delete(object)
+            }
+        } catch {
+            throw MessageStorageError.deleteFailed(error)
         }
     }
     
     func deleteAll() throws {
-        let realm = try Realm()
         let objects = realm.objects(MessageObject.self)
-        try realm.write {
-            realm.delete(objects)
+        do {
+            try realm.write {
+                realm.delete(objects)
+            }
+        } catch {
+            throw MessageStorageError.deleteAllFailed(error)
         }
     }
     
-    func isEmpty() throws -> Bool {
-        let realm = try Realm()
-        return realm.objects(MessageObject.self).isEmpty
+    func isEmpty() -> Bool {
+        realm.objects(MessageObject.self).isEmpty
     }
     
-    func fetchLastMessages(limit: Int) throws -> [Message] {
-        let realm = try Realm()
+    func fetchLastMessages(limit: Int) -> [Message] {
         let objects = realm.objects(MessageObject.self)
             .sorted(by: \.createdAt, ascending: false)
             .prefix(limit)

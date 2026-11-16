@@ -129,13 +129,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Changing the save settings will delete all current messages and erase Luna's memory."
+            "value" : "Changing the save settings will delete all current messages and erase Luna's memory"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Изменение настроек сохранения приведет к удалению всех текущих сообщений и потере памяти Луны."
+            "value" : "Изменение настроек сохранения приведет к удалению всех текущих сообщений и потере памяти Луны"
           }
         }
       }
@@ -174,6 +174,40 @@
         }
       }
     },
+    "error.deleteAllFailed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to delete message history"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось удалить историю сообщений"
+          }
+        }
+      }
+    },
+    "error.deleteFailed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to delete the message"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось удалить сообщение"
+          }
+        }
+      }
+    },
     "error.httpError" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -187,6 +221,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ошибка сервера: %lld"
+          }
+        }
+      }
+    },
+    "error.initFailed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to open message storage"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось открыть хранилище сообщений"
           }
         }
       }
@@ -221,6 +272,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сообщение не найдено в базе"
+          }
+        }
+      }
+    },
+    "error.saveFailed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to save the message"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить сообщение"
+          }
+        }
+      }
+    },
+    "error.updateFailed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to update message history"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось обновить историю сообщений"
           }
         }
       }

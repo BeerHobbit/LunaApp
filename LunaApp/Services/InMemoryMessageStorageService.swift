@@ -28,11 +28,11 @@ final class InMemoryMessageStorageService: MessageStorageServiceProtocol {
         messages.removeAll()
     }
     
-    func isEmpty() throws -> Bool {
+    func isEmpty() -> Bool {
         messages.isEmpty
     }
     
-    func fetchLastMessages(limit: Int) throws -> [Message] {
+    func fetchLastMessages(limit: Int) -> [Message] {
         messages.suffix(limit)
     }
     
