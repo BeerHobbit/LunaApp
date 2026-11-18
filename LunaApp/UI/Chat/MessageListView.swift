@@ -2,17 +2,14 @@ import SwiftUI
 
 struct MessageListView: View {
     
-    // MARK: - Public Properties
-    
-    let messages: [Message]
-    let isFocused: Bool
-    let onMessageCopy: (Message) -> Void
-    let onMessageDelete: (Message) -> Void
-    
     // MARK: - Private Properties
     
     @State private var isInitialLoad: Bool = true
     @State private var isOnBottom: Bool = false
+    private let messages: [Message]
+    private let isFocused: Bool
+    private let onMessageCopy: (Message) -> Void
+    private let onMessageDelete: (Message) -> Void
     
     // MARK: - Body
     
@@ -49,6 +46,20 @@ struct MessageListView: View {
                 scrollToBottom(proxy)
             }
         }
+    }
+    
+    // MARK: - Init
+    
+    init(
+        messages: [Message],
+        isFocused: Bool,
+        onMessageCopy: @escaping (Message) -> Void,
+        onMessageDelete: @escaping (Message) -> Void
+    ) {
+        self.messages = messages
+        self.isFocused = isFocused
+        self.onMessageCopy = onMessageCopy
+        self.onMessageDelete = onMessageDelete
     }
     
     // MARK: - Private Methods

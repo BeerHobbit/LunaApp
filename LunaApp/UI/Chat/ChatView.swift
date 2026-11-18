@@ -65,7 +65,8 @@ struct ChatView: View {
         .safeAreaInset(edge: .bottom, spacing: .zero) {
             MessageInputView(
                 state: $viewModel.inputState,
-                isFocused: $isFocused
+                isFocused: $isFocused,
+                isAnswerLoading: viewModel.isAnswerLoading
             ) {
                 viewModel.sendMessage()
             }

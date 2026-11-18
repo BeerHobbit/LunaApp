@@ -1,15 +1,12 @@
 import SwiftUI
 
 struct MessageBubbleView: View {
-    
-    // MARK: - Public Properties
-    
-    let message: Message
-    let onCopy: (Message) -> Void
-    let onDelete: (Message) -> Void
-    
+
     // MARK: - Private Properties
     
+    private let message: Message
+    private let onCopy: (Message) -> Void
+    private let onDelete: (Message) -> Void
     private var tailSize: CGFloat { AppTheme.Components.tailSize }
     
     // MARK: - Body
@@ -72,6 +69,18 @@ struct MessageBubbleView: View {
             systemImage: SystemIcons.delete,
             role: .destructive
         ) { onDelete(message) }
+    }
+    
+    // MARK: - Init
+    
+    init(
+        message: Message,
+        onCopy: @escaping (Message) -> Void,
+        onDelete: @escaping (Message) -> Void
+    ) {
+        self.message = message
+        self.onCopy = onCopy
+        self.onDelete = onDelete
     }
     
 }

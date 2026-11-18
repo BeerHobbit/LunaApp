@@ -2,14 +2,11 @@ import SwiftUI
 
 struct MenuView: View {
     
-    // MARK: - Public Propeties
-    
-    let isEmpty: Bool
-    let onDeleteAllTap: () -> Void
-    let onSettingsTap: () -> Void
-    
     // MARK: - Private Properties
     
+    private let isEmpty: Bool
+    private let onDeleteAllTap: () -> Void
+    private let onSettingsTap: () -> Void
     private var buttonSize: CGFloat { AppTheme.Components.buttonSize }
     
     // MARK: - Body
@@ -42,6 +39,18 @@ struct MenuView: View {
         }
         .frame(width: buttonSize, height: buttonSize)
         .tint(Color.LunaColors.white)
+    }
+    
+    // MARK: - Init
+    
+    init(
+        isEmpty: Bool,
+        onDeleteAllTap: @escaping () -> Void,
+        onSettingsTap: @escaping () -> Void
+    ) {
+        self.isEmpty = isEmpty
+        self.onDeleteAllTap = onDeleteAllTap
+        self.onSettingsTap = onSettingsTap
     }
     
 }

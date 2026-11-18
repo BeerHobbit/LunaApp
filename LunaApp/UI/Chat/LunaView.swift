@@ -2,14 +2,11 @@ import SwiftUI
 
 struct LunaView: View {
     
-    // MARK: - Public Properties
-    
-    let state: LunaState
-    let background: LunaBackgroundImage
-    let onImageTap: (() -> Void)
-    
     // MARK: - Private Properties
     
+    private let state: LunaState
+    private let background: LunaBackgroundImage
+    private let onImageTap: (() -> Void)
     private static let backgroundRatio: CGFloat = 2
     private static let lunaRatio: CGFloat = 1
     
@@ -26,6 +23,18 @@ struct LunaView: View {
             }
             .clipped()
             .border(Color.LunaColors.violet, width: AppTheme.Components.borderWidth)
+    }
+    
+    // MARK: - Init
+    
+    init(
+        state: LunaState,
+        background: LunaBackgroundImage,
+        onImageTap: @escaping () -> Void
+    ) {
+        self.state = state
+        self.background = background
+        self.onImageTap = onImageTap
     }
     
 }

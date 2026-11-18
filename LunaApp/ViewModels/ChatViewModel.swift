@@ -27,6 +27,7 @@ final class ChatViewModel {
     private var storage: any MessageStorageServiceProtocol
     private let chatService: any ChatServiceProtocol
     private var cancellables = Set<AnyCancellable>()
+    private var chatTask: Task<Void, Never>?
     private static let glitchingTime: Double = 0.75
     private static let historyLimit: Int = 20
     private static let alertRetryDelay: Int = 300
@@ -63,6 +64,7 @@ final class ChatViewModel {
     // MARK: - Public Methods
     
     func sendMessage() {
+        guard chatTask == nil else { return }
         guard let message = makeUserMessage() else { return }
         processMessage(message)
     }
@@ -162,13 +164,23 @@ final class ChatViewModel {
     }
     
     private func processMessage(_ message: Message) {
-        Task { [weak self] in
+        guard chatTask == nil else { return }
+        setLoading(true)
+        
+        chatTask = Task { [weak self] in
             guard let self else { return }
+            
+            defer {
+                self.chatTask = nil
+                setLoading(false)
+            }
             
             do {
                 try storage.save(message)
                 let history = storage.fetchLastMessages(limit: Self.historyLimit)
-                try await fetchReply(history: history)
+                let reply = try await chatService.fetch(history: history)
+                try storage.save(reply)
+                changeEmotion()
             } catch {
                 handleError(
                     error,
@@ -180,15 +192,6 @@ final class ChatViewModel {
                     })
             }
         }
-    }
-    
-    private func fetchReply(history: [Message]) async throws {
-        setLoading(true)
-        defer { setLoading(false) }
-        
-        let reply = try await chatService.fetch(history: history)
-        try storage.save(reply)
-        changeEmotion()
     }
     
     private func setLoading(_ isLoading: Bool) {

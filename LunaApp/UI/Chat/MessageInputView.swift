@@ -2,17 +2,18 @@ import SwiftUI
 
 struct MessageInputView: View {
     
-    // MARK: - Public Properties
-    
-    @Binding var state: InputState
-    @FocusState.Binding var isFocused: Bool
-    let onSend: () -> Void
-    
     // MARK: - Private Properties
     
+    @Binding private var state: InputState
+    @FocusState.Binding private var isFocused: Bool
+    private let isAnswerLoading: Bool
+    private let onSend: () -> Void
     private static let lineLimit: Int = 6
+    private var isSendingDisabled: Bool {
+        isAnswerLoading || state.isInputEmpty || state.isLimitReached
+    }
     private var buttonImageStyle: Color {
-        state.isInputEmpty || state.isLimitReached
+        isSendingDisabled
         ? Color.LunaColors.gray
         : Color.LunaColors.black
     }
@@ -61,7 +62,7 @@ struct MessageInputView: View {
                 )
                 .background(Color.LunaColors.white)
                 .foregroundStyle(buttonImageStyle)
-                .disabled(state.isInputEmpty || state.isLimitReached)
+                .disabled(isSendingDisabled)
             }
         }
         .border(Color.LunaColors.white, width: AppTheme.Components.borderWidth)
@@ -71,6 +72,20 @@ struct MessageInputView: View {
         .onTapGesture {
             isFocused = true
         }
+    }
+    
+    // MARK: - Init
+    
+    init(
+        state: Binding<InputState>,
+        isFocused: FocusState<Bool>.Binding,
+        isAnswerLoading: Bool,
+        onSend: @escaping () -> Void
+    ) {
+        self._state = state
+        self._isFocused = isFocused
+        self.isAnswerLoading = isAnswerLoading
+        self.onSend = onSend
     }
     
 }

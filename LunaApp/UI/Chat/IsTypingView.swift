@@ -2,12 +2,9 @@ import SwiftUI
 
 struct IsTypingView: View {
     
-    // MARK: - Public Properties
-    
-    let isTyping: Bool
-    
     // MARK: - Private Properties
     
+    private let isTyping: Bool
     private static let viewOpacity: Double = 0.65
     
     // MARK: - Body
@@ -24,6 +21,12 @@ struct IsTypingView: View {
         .animation(.easeInOut(duration: AppTheme.Animations.shortDuration)) {
             $0.opacity(isTyping ? IsTypingView.viewOpacity : .zero)
         }
+    }
+    
+    // MARK: - Init
+    
+    init(isTyping: Bool) {
+        self.isTyping = isTyping
     }
     
 }
