@@ -12,25 +12,41 @@ struct MessageInputView: View {
     
     private static let lineLimit: Int = 6
     private var buttonImageStyle: Color {
-        state.sendingIsDisabled ? Color.LunaColors.gray : Color.LunaColors.black
+        state.isInputEmpty || state.isLimitReached
+        ? Color.LunaColors.gray
+        : Color.LunaColors.black
     }
     
     // MARK: - Body
     
     var body: some View {
         HStack(spacing: AppTheme.Spacings.xSmall) {
-            TextField(
-                "",
-                text: $state.input,
-                prompt: Text(.inputPlaceholder)
-                    .foregroundStyle(Color.LunaColors.gray),
-                axis: .vertical
-            )
-            .font(AppFont.medium)
-            .lineLimit(MessageInputView.lineLimit)
-            .padding(AppTheme.Spacings.medium)
-            .foregroundStyle(Color.LunaColors.white)
-            .focused($isFocused)
+            VStack(alignment: .leading, spacing: 0) {
+                if state.isLimitReached {
+                    Text(
+                        .inputCharacterLimitReached(
+                            current: state.input.unicodeScalars.count,
+                            limit: state.characterLimit
+                        )
+                    )
+                        .font(AppFont.regular)
+                        .foregroundStyle(.red)
+                        .padding(.horizontal, AppTheme.Spacings.medium)
+                        .padding(.top, AppTheme.Spacings.xSmall)
+                }
+                TextField(
+                    "",
+                    text: $state.input,
+                    prompt: Text(.inputPlaceholder)
+                        .foregroundStyle(Color.LunaColors.gray),
+                    axis: .vertical
+                )
+                .font(AppFont.medium)
+                .lineLimit(MessageInputView.lineLimit)
+                .padding(AppTheme.Spacings.medium)
+                .foregroundStyle(Color.LunaColors.white)
+                .focused($isFocused)
+            }
             VStack {
                 Spacer(minLength: .zero)
                 Button(action: onSend) {
@@ -45,7 +61,7 @@ struct MessageInputView: View {
                 )
                 .background(Color.LunaColors.white)
                 .foregroundStyle(buttonImageStyle)
-                .disabled(state.sendingIsDisabled)
+                .disabled(state.isInputEmpty || state.isLimitReached)
             }
         }
         .border(Color.LunaColors.white, width: AppTheme.Components.borderWidth)

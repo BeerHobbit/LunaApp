@@ -310,6 +310,23 @@
         }
       }
     },
+    "input.characterLimitReached" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No more than %1$(current)lld\\%2$(limit)lld characters"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не более %1$(current)lld\\%2$(limit)lld символов"
+          }
+        }
+      }
+    },
     "input.placeholder" : {
       "extractionState" : "manual",
       "localizations" : {

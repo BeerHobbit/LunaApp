@@ -8,10 +8,16 @@ final class ChatViewModel {
     // MARK: - Public Properties
     
     private(set) var messages: [Message] = []
-    private(set) var lunaState: LunaState = LunaState(emotion: .greetings, isGlitched: false)
+    private(set) var lunaState: LunaState = LunaState(
+        emotion: .greetings,
+        isGlitched: false
+    )
     private(set) var isAnswerLoading: Bool = false
     private(set) var settings: Settings
-    var inputState: InputState = InputState(input: "")
+    var inputState: InputState = InputState(
+        input: "",
+        characterLimit: inputCharacterLimit
+    )
     var errorAlert: AlertState?
     
     // MARK: - Private Properties
@@ -24,6 +30,7 @@ final class ChatViewModel {
     private static let glitchingTime: Double = 0.75
     private static let historyLimit: Int = 20
     private static let alertRetryDelay: Int = 300
+    private static let inputCharacterLimit: Int = 2000
     
     // MARK: - Init
     
@@ -140,7 +147,10 @@ final class ChatViewModel {
     
     private func makeUserMessage() -> Message? {
         let input = inputState.input
-        guard !input.isEmpty else { return nil }
+        guard !input.isEmpty &&
+                input.unicodeScalars.count <= Self.inputCharacterLimit else {
+            return nil
+        }
         inputState.clear()
         
         return Message(
