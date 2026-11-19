@@ -180,7 +180,7 @@ final class ChatViewModel {
                 let history = storage.fetchLastMessages(limit: Self.historyLimit)
                 let reply = try await chatService.fetch(history: history)
                 try storage.save(reply)
-                changeEmotion()
+                changeEmotion(from: reply)
             } catch {
                 handleError(
                     error,
@@ -199,8 +199,9 @@ final class ChatViewModel {
         isAnswerLoading = isLoading
     }
     
-    private func changeEmotion() {
-        lunaState.emotion = LunaEmotion.allCases.randomElement() ?? .greetings
+    private func changeEmotion(from reply: Message) {
+        guard case reply.sender = .luna else { return }
+        lunaState.emotion = LunaEmotion.find(in: reply.text)
     }
     
     private func handleError(
