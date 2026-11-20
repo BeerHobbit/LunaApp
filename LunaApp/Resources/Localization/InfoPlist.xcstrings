@@ -1,0 +1,36 @@
+{
+  "sourceLanguage" : "ru",
+  "strings" : {
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "LunaApp"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "NSUserNotificationsUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow Luna to send notifications when she wants to chat?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разрешить Луне присылать уведомления, когда она захочет поболтать?"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.3"
+}

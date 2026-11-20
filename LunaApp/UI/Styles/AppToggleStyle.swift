@@ -39,9 +39,11 @@ struct AppToggleStyle: ToggleStyle {
             .animation(.easeInOut(duration: AppTheme.Animations.duration), value: configuration.isOn)
             .onTapGesture {
                 configuration.isOn.toggle()
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
             }
             .onLongPressGesture(minimumDuration: Self.gestureDuration) {
                 configuration.isOn.toggle()
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
             } onPressingChanged: { pressing in
                 isPressed = pressing
             }

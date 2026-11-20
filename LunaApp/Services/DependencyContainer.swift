@@ -8,24 +8,28 @@ final class DependencyContainer {
     private let messageStorageFactory: any MessageStorageFactoryProtocol
     private let networkClient: any NetworkClientProtocol
     private let chatService: any ChatServiceProtocol
+    private let notificationManager: NotificationManager
     
     init() {
         self.settingsStorageService = SettingsStorageService()
         self.messageStorageFactory = MessageStorageFactory()
         self.networkClient = NetworkClient()
         self.chatService = ChatService(client: networkClient)
+        self.notificationManager = NotificationManager()
     }
     
     init(
         settingsStorageService: SettingsStorageServiceProtocol,
         messageStorageFactory: MessageStorageFactoryProtocol,
         networkClient: NetworkClientProtocol,
-        chatService: ChatServiceProtocol
+        chatService: ChatServiceProtocol,
+        notificationManager: NotificationManager
     ) {
         self.settingsStorageService = settingsStorageService
         self.messageStorageFactory = messageStorageFactory
         self.networkClient = networkClient
         self.chatService = chatService
+        self.notificationManager = notificationManager
     }
     
     func makeChatViewModel() -> ChatViewModel {

@@ -395,6 +395,40 @@
         }
       }
     },
+    "notification.body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heyyy! I'm getting bored all by myself. Wanna chat? (^-^*)/"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приветик! Мне тут одной скучно, поболтаем? (^-^*)/"
+          }
+        }
+      }
+    },
+    "notification.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luna sent message"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Луна прислала сообщение"
+          }
+        }
+      }
+    },
     "settings.lunaWallpapers" : {
       "extractionState" : "manual",
       "localizations" : {
